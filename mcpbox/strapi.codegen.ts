@@ -8,7 +8,7 @@ const config: CodegenConfig = {
     {
       [`${process.env.STRAPI_SCHEMA_URL}`]: {
         headers: {
-          Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
       },
     },

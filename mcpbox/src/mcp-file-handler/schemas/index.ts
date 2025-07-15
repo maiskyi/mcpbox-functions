@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+const settingSchema = z.object({
+  name: z.string().nonoptional(),
+  secured: z.boolean().nonoptional(),
+  required: z.boolean().nonoptional(),
+  description: z.string().optional(),
+});
+
 const parameterSchema = z.object({
   name: z.string().nonoptional(),
   type: z.string().nonoptional(),
@@ -18,4 +25,5 @@ export const fileSchema = z.object({
   githubUrl: z.url().nonoptional(),
   description: z.string().nonoptional(),
   tools: z.array(toolSchema).nonoptional(),
+  settings: z.array(settingSchema).nonoptional(),
 });

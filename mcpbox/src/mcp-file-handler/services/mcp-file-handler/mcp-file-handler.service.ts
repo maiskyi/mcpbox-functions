@@ -27,6 +27,7 @@ export class McpFileHandlerService {
         GitHubUrl: data.githubUrl,
         IsOfficial: data.isOfficial,
         Tools: JSON.stringify(data.tools),
+        Settings: JSON.stringify(data.settings),
       },
     });
 
@@ -57,9 +58,19 @@ export class McpFileHandlerService {
 
       if (!data) throw new Error('File Schema: No data');
 
-      const { documentId } = await this.createStrapiServer(data);
+      const { server } = await this.strapi.servers.findOne({
+        filters: {
+          GitHubUrl: {
+            eq: data.githubUrl,
+          },
+        },
+      });
 
-      console.log(documentId);
+      console.log(server);
+
+      // const { documentId } = await this.createStrapiServer(data);
+
+      // console.log(documentId);
     } catch (error) {
       this.logger.error(error);
     }

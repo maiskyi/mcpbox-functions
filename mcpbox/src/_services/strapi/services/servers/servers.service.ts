@@ -4,6 +4,9 @@ import {
   CreateServer,
   CreateServerMutation,
   CreateServerMutationVariables,
+  FindOneServer,
+  FindOneServerQuery,
+  FindOneServerQueryVariables,
 } from '../../__generated__/query';
 import { GqlClientService } from '../gql-client';
 
@@ -25,5 +28,21 @@ export class ServersService {
     const { createServer } = data;
 
     return { ...createServer };
+  }
+
+  public async findOne(variables: FindOneServerQueryVariables) {
+    const {
+      data: {
+        servers: [server],
+      },
+    } = await this.client.query<
+      FindOneServerQuery,
+      FindOneServerQueryVariables
+    >({
+      variables,
+      query: FindOneServer,
+    });
+
+    return { server };
   }
 }
