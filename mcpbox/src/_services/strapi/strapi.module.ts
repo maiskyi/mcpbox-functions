@@ -30,7 +30,9 @@ export class StrapiModule {
                 Authorization: `Bearer ${apiToken}`,
               },
             }),
-            cache: new InMemoryCache(),
+            cache: new InMemoryCache({
+              resultCaching: false,
+            }),
           }),
         },
       ],

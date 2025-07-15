@@ -4,9 +4,11 @@ import {
   FirebaseStorageService,
 } from '@services/firebase-storage';
 import { StrapiClientService } from '@services/strapi';
+import { EventBus } from '@nestjs/cqrs';
 
 import { fileSchema } from '../../schemas';
 import { FileSchema } from '../../types';
+import { NewServerFoundEvent } from '../../events/new-server-found';
 
 @Injectable()
 export class McpFileHandlerService {
@@ -17,6 +19,7 @@ export class McpFileHandlerService {
   public constructor(
     private storage: FirebaseStorageService,
     private strapi: StrapiClientService,
+    private eventBus: EventBus,
   ) {}
 
   private async createStrapiServer(data: FileSchema) {
@@ -66,11 +69,14 @@ export class McpFileHandlerService {
         },
       });
 
-      console.log(server);
-
-      // const { documentId } = await this.createStrapiServer(data);
-
-      // console.log(documentId);
+      if (!server) {
+        this.eventBus.publish(
+          new NewServerFoundEvent({
+            data,
+          }),
+        );
+        return;
+      }
     } catch (error) {
       this.logger.error(error);
     }

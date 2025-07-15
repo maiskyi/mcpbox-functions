@@ -4,12 +4,14 @@ import { ConfigModule } from '@nestjs/config';
 import { FirebaseAdminModule } from '@services/firebase-admin';
 import { FirebaseStorageModule } from '@services/firebase-storage';
 import { StrapiModule } from '@services/strapi';
+import { CqrsModule } from '@nestjs/cqrs';
 
 import { McpFileHandlerModule } from './mcp-file-handler';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    CqrsModule.forRoot(),
     // Services
     FirebaseAdminModule,
     FirebaseStorageModule.forRoot(),

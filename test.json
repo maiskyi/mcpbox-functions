@@ -1,7 +1,7 @@
 {
   "isOfficial": true,
   "title": "Namecheap Domains -Search/Register",
-  "githubUrl": "https://github.com/webdevtodayjason/namecheap-mcp",
+  "githubUrl": "https://github.com/brightdata/brightdata-mcp",
   "description": "Let your AI help you find the best domain! Check availability and get costs in one shot and heck, even have your AI register your shiny new domain for you!",
   "tools": [
     {

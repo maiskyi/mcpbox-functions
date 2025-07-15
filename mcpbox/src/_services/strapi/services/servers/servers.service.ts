@@ -41,6 +41,7 @@ export class ServersService {
     >({
       variables,
       query: FindOneServer,
+      fetchPolicy: 'no-cache',
     });
 
     return { server };
