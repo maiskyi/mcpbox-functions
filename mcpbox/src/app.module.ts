@@ -1,15 +1,22 @@
 import { INestApplicationContext, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 import { FirebaseAdminModule } from '@services/firebase-admin';
 import { FirebaseStorageModule } from '@services/firebase-storage';
+import { StrapiModule } from '@services/strapi';
 
 import { McpFileHandlerModule } from './mcp-file-handler';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     // Services
     FirebaseAdminModule,
     FirebaseStorageModule.forRoot(),
+    StrapiModule.forRoot({
+      apiKey: process.env.STRAPI_API_KEY,
+      schemaUrl: process.env.STRAPI_SCHEMA_URL,
+    }),
     // Features
     McpFileHandlerModule,
   ],

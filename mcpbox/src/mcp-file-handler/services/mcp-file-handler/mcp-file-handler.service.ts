@@ -3,8 +3,10 @@ import {
   StorageEvent,
   FirebaseStorageService,
 } from '@services/firebase-storage';
+import { StrapiClientService } from '@services/strapi';
 
 import { fileSchema } from '../../schemas';
+import { FileSchema } from '../../types';
 
 @Injectable()
 export class McpFileHandlerService {
@@ -12,7 +14,24 @@ export class McpFileHandlerService {
     timestamp: true,
   });
 
-  public constructor(private storage: FirebaseStorageService) {}
+  public constructor(
+    private storage: FirebaseStorageService,
+    private strapi: StrapiClientService,
+  ) {}
+
+  private async createStrapiServer(data: FileSchema) {
+    const { documentId } = await this.strapi.servers.create({
+      data: {
+        Title: data.title,
+        Description: data.description,
+        GitHubUrl: data.githubUrl,
+        IsOfficial: data.isOfficial,
+        Tools: JSON.stringify(data.tools),
+      },
+    });
+
+    return { documentId };
+  }
 
   public async handleStorageEvent({
     data: { bucket, name, contentType },
@@ -38,9 +57,9 @@ export class McpFileHandlerService {
 
       if (!data) throw new Error('File Schema: No data');
 
-      console.log({
-        data,
-      });
+      const { documentId } = await this.createStrapiServer(data);
+
+      console.log(documentId);
     } catch (error) {
       this.logger.error(error);
     }
