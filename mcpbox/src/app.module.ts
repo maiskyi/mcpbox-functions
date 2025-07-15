@@ -14,7 +14,7 @@ import { McpFileHandlerModule } from './mcp-file-handler';
     FirebaseAdminModule,
     FirebaseStorageModule.forRoot(),
     StrapiModule.forRoot({
-      apiKey: process.env.STRAPI_API_KEY,
+      apiToken: process.env.STRAPI_API_TOKEN,
       schemaUrl: process.env.STRAPI_SCHEMA_URL,
     }),
     // Features

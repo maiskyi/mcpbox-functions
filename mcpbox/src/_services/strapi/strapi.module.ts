@@ -14,7 +14,7 @@ import { ServersService } from './services/servers';
 export class StrapiModule {
   public static forRoot({
     schemaUrl,
-    apiKey,
+    apiToken,
   }: StrapiModuleConfig): DynamicModule {
     return {
       global: true,
@@ -27,7 +27,7 @@ export class StrapiModule {
               uri: schemaUrl,
               fetch,
               headers: {
-                Authorization: `Bearer ${apiKey}`,
+                Authorization: `Bearer ${apiToken}`,
               },
             }),
             cache: new InMemoryCache(),

@@ -7,6 +7,6 @@ export const handleOnMcpFileCreatedUpdated = onObjectFinalized(
   async (event) => {
     const app = await HandlersModule.getApp();
     const service = app.get(McpFileHandlerService);
-    service.handleStorageEvent(event);
+    await service.handleStorageEvent(event);
   },
 );
