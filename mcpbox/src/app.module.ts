@@ -1,6 +1,7 @@
 import { INestApplicationContext, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { FirebaseAdminModule } from '@services/firebase-admin';
+import { FirebaseStorageModule } from '@services/firebase-storage';
 
 import { McpFileHandlerModule } from './mcp-file-handler';
 
@@ -8,6 +9,7 @@ import { McpFileHandlerModule } from './mcp-file-handler';
   imports: [
     // Services
     FirebaseAdminModule,
+    FirebaseStorageModule.forRoot(),
     // Features
     McpFileHandlerModule,
   ],
