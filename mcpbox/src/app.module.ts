@@ -1,16 +1,26 @@
-import { INestApplicationContext } from '@nestjs/common';
+import { INestApplicationContext, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { FirebaseAdminModule } from '@services/firebase-admin';
 
 import { McpFileHandlerModule } from './mcp-file-handler';
 
-export class AppModule {
-  private static _mcpFileHandlerApp: INestApplicationContext;
+@Module({
+  imports: [
+    // Services
+    FirebaseAdminModule,
+    // Features
+    McpFileHandlerModule,
+  ],
+})
+class AppModule {}
 
-  public static async getMcpFileHandlerApp(): Promise<INestApplicationContext> {
-    if (!this._mcpFileHandlerApp) {
-      this._mcpFileHandlerApp =
-        await NestFactory.createApplicationContext(McpFileHandlerModule);
+export class HandlersModule {
+  private static _app: INestApplicationContext;
+
+  public static async getApp(): Promise<INestApplicationContext> {
+    if (!this._app) {
+      this._app = await NestFactory.createApplicationContext(AppModule);
     }
-    return this._mcpFileHandlerApp;
+    return this._app;
   }
 }

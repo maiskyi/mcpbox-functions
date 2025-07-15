@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { StrapiModule } from '@services/strapi';
-import { GcStorageModule } from '@services/gc-storage';
+
+import { McpFileHandlerService } from './services/mcp-file-handler';
 
 @Module({
-  imports: [StrapiModule, GcStorageModule],
+  providers: [McpFileHandlerService],
+  exports: [McpFileHandlerService],
 })
 export class McpFileHandlerModule {}
