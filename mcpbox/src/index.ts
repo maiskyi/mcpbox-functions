@@ -1,5 +1,8 @@
 import { onObjectFinalized } from 'firebase-functions/v2/storage';
 
-export const handleOnMcpFileCreatedUpdated = onObjectFinalized((t) => {
-  console.log(t);
+import { AppModule } from './app.module';
+
+export const handleOnMcpFileCreatedUpdated = onObjectFinalized(async (t) => {
+  const app = await AppModule.getMcpFileHandlerApp();
+  console.log({ app, t });
 });

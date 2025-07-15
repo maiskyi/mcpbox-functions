@@ -1,10 +1,16 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { INestApplicationContext } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 
-@Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
+import { McpFileHandlerModule } from './mcp-file-handler';
+
+export class AppModule {
+  private static _mcpFileHandlerApp: INestApplicationContext;
+
+  public static async getMcpFileHandlerApp(): Promise<INestApplicationContext> {
+    if (!this._mcpFileHandlerApp) {
+      this._mcpFileHandlerApp =
+        await NestFactory.createApplicationContext(McpFileHandlerModule);
+    }
+    return this._mcpFileHandlerApp;
+  }
+}
