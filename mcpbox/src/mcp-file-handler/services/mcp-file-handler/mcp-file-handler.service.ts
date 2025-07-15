@@ -4,6 +4,8 @@ import {
   FirebaseStorageService,
 } from '@services/firebase-storage';
 
+import { fileSchema } from '../../schemas';
+
 @Injectable()
 export class McpFileHandlerService {
   private logger = new Logger(McpFileHandlerService.name, {
@@ -30,7 +32,15 @@ export class McpFileHandlerService {
 
       const json = JSON.parse(content);
 
-      console.log(json);
+      const { data, error } = await fileSchema.safeParseAsync(json);
+
+      if (error) throw error;
+
+      if (!data) throw new Error('File Schema: No data');
+
+      console.log({
+        data,
+      });
     } catch (error) {
       this.logger.error(error);
     }
