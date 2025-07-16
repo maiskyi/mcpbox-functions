@@ -17,10 +17,19 @@ export class UpdateServerOverviewHandler
     private strapi: StrapiClientService,
   ) {}
 
-  public async execute({ command: { data } }: UpdateServerOverviewCommand) {
+  public async execute({
+    command: { data, documentId },
+  }: UpdateServerOverviewCommand) {
     try {
-      await Promise.resolve();
-      console.log(data);
+      const server = await this.strapi.servers.update({
+        documentId,
+        data: {
+          Overview: 'test',
+        },
+      });
+
+      if (!server.documentId) throw new Error('No documentId');
+
       //   const { documentId } = await this.strapi.servers.create({
       //     data: {
       //       Title: data.title,

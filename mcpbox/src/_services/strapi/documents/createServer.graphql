@@ -1,5 +1,5 @@
-mutation createServer($data: ServerInput!) {
-  createServer(data: $data, status: DRAFT) {
+mutation createServer($data: ServerInput!, $status: PublicationStatus = DRAFT) {
+  createServer(data: $data, status: $status) {
     documentId
   }
 }

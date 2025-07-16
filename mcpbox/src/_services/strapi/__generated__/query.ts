@@ -1336,6 +1336,7 @@ export type UsersPermissionsUserRelationResponseCollection = {
 
 export type CreateServerMutationVariables = Exact<{
   data: ServerInput;
+  status?: InputMaybe<PublicationStatus>;
 }>;
 
 
@@ -1348,10 +1349,19 @@ export type FindOneServerQueryVariables = Exact<{
 
 export type FindOneServerQuery = { __typename?: 'Query', servers: Array<{ __typename?: 'Server', documentId: string } | null> };
 
+export type UpdateServerMutationVariables = Exact<{
+  documentId: Scalars['ID']['input'];
+  data: ServerInput;
+  status?: InputMaybe<PublicationStatus>;
+}>;
+
+
+export type UpdateServerMutation = { __typename?: 'Mutation', updateServer?: { __typename?: 'Server', documentId: string } | null };
+
 
 export const CreateServer = gql`
-    mutation createServer($data: ServerInput!) {
-  createServer(data: $data, status: DRAFT) {
+    mutation createServer($data: ServerInput!, $status: PublicationStatus = DRAFT) {
+  createServer(data: $data, status: $status) {
     documentId
   }
 }
@@ -1359,6 +1369,13 @@ export const CreateServer = gql`
 export const FindOneServer = gql`
     query findOneServer($filters: ServerFiltersInput!) {
   servers(filters: $filters, pagination: {limit: 1}) {
+    documentId
+  }
+}
+    `;
+export const UpdateServer = gql`
+    mutation updateServer($documentId: ID!, $data: ServerInput!, $status: PublicationStatus = DRAFT) {
+  updateServer(documentId: $documentId, data: $data, status: $status) {
     documentId
   }
 }
