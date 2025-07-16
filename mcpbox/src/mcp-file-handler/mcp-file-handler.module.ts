@@ -7,6 +7,7 @@ import { McpFileHandlerService } from './services/mcp-file-handler';
 // Events
 import { NewServerFoundHandler } from './events/new-server-found';
 import { CreateDraftServerSucceedHandler } from './events/create-draft-server-succeed';
+import { UpdateServerOverviewSucceedEvent } from './events/update-server-overview-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
@@ -20,6 +21,7 @@ import { UpdateServerOverviewHandler } from './commands/update-server-overview';
     // Events
     NewServerFoundHandler,
     CreateDraftServerSucceedHandler,
+    UpdateServerOverviewSucceedEvent,
     // Commands
     CreateDraftServerHandler,
     UpdateServerOverviewHandler,
