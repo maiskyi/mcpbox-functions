@@ -10,6 +10,9 @@ import {
   UpdateServer,
   UpdateServerMutation,
   UpdateServerMutationVariables,
+  FindManyServers,
+  FindManyServersQuery,
+  FindManyServersQueryVariables,
 } from '../../__generated__/query';
 import { GqlClientService } from '../gql-client';
 
@@ -79,6 +82,26 @@ export class ServersService {
       const { updateServer } = data;
 
       return { ...updateServer };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async findMany(variables: FindManyServersQueryVariables) {
+    try {
+      const {
+        data: { servers },
+      } = await this.client.query<
+        FindManyServersQuery,
+        FindManyServersQueryVariables
+      >({
+        variables,
+        query: FindManyServers,
+        fetchPolicy: 'no-cache',
+      });
+
+      return { servers };
     } catch (error) {
       this.logger.error(error);
       throw error;

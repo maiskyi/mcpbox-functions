@@ -1,0 +1,6 @@
+query findManyServers($filters: ServerFiltersInput, $pagination: PaginationArg) {
+  servers(filters: $filters, pagination: $pagination) {
+    Slug
+    documentId
+  }
+}
