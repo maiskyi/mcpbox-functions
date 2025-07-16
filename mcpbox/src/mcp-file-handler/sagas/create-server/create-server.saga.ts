@@ -4,8 +4,10 @@ import { map, merge, Observable, tap } from 'rxjs';
 
 // Events
 import { NewServerFoundEvent } from '../../events/new-server-found';
+import { CreateDraftServerSucceedEvent } from '../../events/create-draft-server-succeed';
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
+import { UpdateServerOverviewCommand } from '../../commands/update-server-overview';
 
 @Injectable()
 export class CreateServerSaga {
@@ -18,26 +20,26 @@ export class CreateServerSaga {
     return merge(
       events$.pipe(
         ofType(NewServerFoundEvent),
-        map(({ event }: NewServerFoundEvent) => {
-          console.log(1233);
-          return new CreateDraftServerCommand(event);
-        }),
+        map(
+          ({ event }: NewServerFoundEvent) =>
+            new CreateDraftServerCommand(event),
+        ),
         tap(({ command }: CreateDraftServerCommand) =>
           this.logger.log(`Creating draft server ${command.data.title}`),
         ),
       ),
+      events$.pipe(
+        ofType(CreateDraftServerSucceedEvent),
+        map(
+          ({ event }: CreateDraftServerSucceedEvent) =>
+            new UpdateServerOverviewCommand(event),
+        ),
+        tap(({ command }: UpdateServerOverviewCommand) =>
+          this.logger.log(`Updating server overview ${command.data.title}`),
+        ),
+      ),
     );
 
-    //   events$.pipe(
-    //     ofType(AssetsToUploadDoNotExistEvent),
-    //     map(
-    //       ({ event }: AssetsToUploadDoNotExistEvent) =>
-    //         new MarkSurveyAsCompletedCommand(event),
-    //     ),
-    //     tap(({ command }: MarkSurveyAsCompletedCommand) =>
-    //       this.logger.log(`Marking survey as completed...[${command.id}]`),
-    //     ),
-    //   ),
     //   events$.pipe(
     //     ofType(AssetsToUploadExistEvent),
     //     map(

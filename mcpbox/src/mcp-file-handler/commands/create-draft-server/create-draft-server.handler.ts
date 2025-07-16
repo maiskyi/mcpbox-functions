@@ -2,6 +2,8 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 
+import { CreateDraftServerSucceedEvent } from '../../events/create-draft-server-succeed';
+
 import { CreateDraftServerCommand } from './create-draft-server.command';
 
 @CommandHandler(CreateDraftServerCommand)
@@ -33,30 +35,11 @@ export class CreateDraftServerHandler
       if (!documentId) throw new Error('No documentId');
 
       this.eventBus.publish(
-        new AssetsToUploadExistEvent({
-          ...command,
-          assets,
+        new CreateDraftServerSucceedEvent({
+          data,
+          documentId,
         }),
       );
-      //   const { slug } = command;
-      //   const { json } = await this.contentful.surveys.getBySlug({
-      //     slug,
-      //     language: LanguageTag['en-US'],
-      //   });
-      //   const elements = this.flatten(json);
-      //   const assets = elements.filter(
-      //     ({ type }) => type === SurveyJsonPageElementType.File,
-      //   );
-      //   if (assets.length) {
-      //     this.eventBus.publish(
-      //       new AssetsToUploadExistEvent({
-      //         ...command,
-      //         assets,
-      //       }),
-      //     );
-      //   } else {
-      //     this.eventBus.publish(new AssetsToUploadDoNotExistEvent(command));
-      //   }
     } catch (error) {
       this.logger.error(error);
       //   this.eventBus.publish(
