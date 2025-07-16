@@ -11,6 +11,7 @@ import { UpdateServerOverviewSucceedEvent } from './events/update-server-overvie
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
+import { UpdateServerOwnerHandler } from './commands/update-server-owner';
 
 @Module({
   providers: [
@@ -25,6 +26,7 @@ import { UpdateServerOverviewHandler } from './commands/update-server-overview';
     // Commands
     CreateDraftServerHandler,
     UpdateServerOverviewHandler,
+    UpdateServerOwnerHandler,
   ],
   exports: [McpFileHandlerService],
 })

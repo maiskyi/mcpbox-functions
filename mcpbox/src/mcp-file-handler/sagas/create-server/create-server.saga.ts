@@ -9,6 +9,7 @@ import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-ove
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
 import { UpdateServerOverviewCommand } from '../../commands/update-server-overview';
+import { UpdateServerOwnerCommand } from '../../commands/update-server-owner';
 
 @Injectable()
 export class CreateServerSaga {
@@ -43,10 +44,10 @@ export class CreateServerSaga {
         ofType(UpdateServerOverviewSucceedEvent),
         map(
           ({ event }: UpdateServerOverviewSucceedEvent) =>
-            new UpdateServerOverviewCommand(event),
+            new UpdateServerOwnerCommand(event),
         ),
-        tap(({ command }: UpdateServerOverviewCommand) =>
-          this.logger.log(`Updating server overview ${command.data.title}`),
+        tap(({ command }: UpdateServerOwnerCommand) =>
+          this.logger.log(`Updating server owner ${command.data.title}`),
         ),
       ),
     );
