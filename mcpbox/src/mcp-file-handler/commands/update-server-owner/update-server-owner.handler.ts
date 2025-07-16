@@ -2,15 +2,15 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 
-import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-overview-succeed';
+import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
 
-import { UpdateServerOverviewCommand } from './update-server-overview.command';
+import { UpdateServerOwnerCommand } from './update-server-owner.command';
 
-@CommandHandler(UpdateServerOverviewCommand)
-export class UpdateServerOverviewHandler
-  implements ICommandHandler<UpdateServerOverviewCommand>
+@CommandHandler(UpdateServerOwnerCommand)
+export class UpdateServerOwnerHandler
+  implements ICommandHandler<UpdateServerOwnerCommand>
 {
-  private readonly logger = new Logger(UpdateServerOverviewHandler.name, {
+  private readonly logger = new Logger(UpdateServerOwnerHandler.name, {
     timestamp: true,
   });
 
@@ -21,19 +21,19 @@ export class UpdateServerOverviewHandler
 
   public async execute({
     command: { data, documentId },
-  }: UpdateServerOverviewCommand) {
+  }: UpdateServerOwnerCommand) {
     try {
       const server = await this.strapi.servers.update({
         documentId,
         data: {
-          Overview: 'test',
+          GitHubOwner: 'test',
         },
       });
 
       if (!server.documentId) throw new Error('No documentId');
 
       this.eventBus.publish(
-        new UpdateServerOverviewSucceedEvent({
+        new UpdateServerOwnerSucceedEvent({
           data,
           documentId,
         }),

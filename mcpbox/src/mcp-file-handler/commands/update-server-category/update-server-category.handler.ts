@@ -2,15 +2,15 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 
-import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-overview-succeed';
+import { UpdateServerCategorySucceedEvent } from '../../events/update-server-category-succeed';
 
-import { UpdateServerOverviewCommand } from './update-server-overview.command';
+import { UpdateServerCategoryCommand } from './update-server-category.command';
 
-@CommandHandler(UpdateServerOverviewCommand)
-export class UpdateServerOverviewHandler
-  implements ICommandHandler<UpdateServerOverviewCommand>
+@CommandHandler(UpdateServerCategoryCommand)
+export class UpdateServerCategoryHandler
+  implements ICommandHandler<UpdateServerCategoryCommand>
 {
-  private readonly logger = new Logger(UpdateServerOverviewHandler.name, {
+  private readonly logger = new Logger(UpdateServerCategoryHandler.name, {
     timestamp: true,
   });
 
@@ -21,19 +21,19 @@ export class UpdateServerOverviewHandler
 
   public async execute({
     command: { data, documentId },
-  }: UpdateServerOverviewCommand) {
+  }: UpdateServerCategoryCommand) {
     try {
       const server = await this.strapi.servers.update({
         documentId,
         data: {
-          Overview: 'test',
+          Category: 'r128c7nfg17dwl99wh1yhdgx',
         },
       });
 
       if (!server.documentId) throw new Error('No documentId');
 
       this.eventBus.publish(
-        new UpdateServerOverviewSucceedEvent({
+        new UpdateServerCategorySucceedEvent({
           data,
           documentId,
         }),

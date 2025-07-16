@@ -1342,6 +1342,14 @@ export type CreateServerMutationVariables = Exact<{
 
 export type CreateServerMutation = { __typename?: 'Mutation', createServer?: { __typename?: 'Server', documentId: string } | null };
 
+export type FindManyServersQueryVariables = Exact<{
+  filters?: InputMaybe<ServerFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+}>;
+
+
+export type FindManyServersQuery = { __typename?: 'Query', servers: Array<{ __typename?: 'Server', Slug: string, documentId: string } | null> };
+
 export type FindOneServerQueryVariables = Exact<{
   filters: ServerFiltersInput;
 }>;
@@ -1362,6 +1370,14 @@ export type UpdateServerMutation = { __typename?: 'Mutation', updateServer?: { _
 export const CreateServer = gql`
     mutation createServer($data: ServerInput!, $status: PublicationStatus = DRAFT) {
   createServer(data: $data, status: $status) {
+    documentId
+  }
+}
+    `;
+export const FindManyServers = gql`
+    query findManyServers($filters: ServerFiltersInput, $pagination: PaginationArg) {
+  servers(filters: $filters, pagination: $pagination) {
+    Slug
     documentId
   }
 }
