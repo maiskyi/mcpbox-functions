@@ -13,6 +13,7 @@ import { UpdateServerOwnerSucceedHandler } from './events/update-server-owner-su
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
 import { UpdateServerOwnerHandler } from './commands/update-server-owner';
+import { UpdateServerCategoryHandler } from './commands/update-server-category';
 
 @Module({
   providers: [
@@ -29,6 +30,7 @@ import { UpdateServerOwnerHandler } from './commands/update-server-owner';
     CreateDraftServerHandler,
     UpdateServerOverviewHandler,
     UpdateServerOwnerHandler,
+    UpdateServerCategoryHandler,
   ],
   exports: [McpFileHandlerService],
 })
