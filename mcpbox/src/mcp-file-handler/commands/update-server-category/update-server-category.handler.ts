@@ -2,7 +2,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 
-import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
+import { UpdateServerCategorySucceedEvent } from '../../events/update-server-category-succeed';
 
 import { UpdateServerCategoryCommand } from './update-server-category.command';
 
@@ -32,12 +32,12 @@ export class UpdateServerCategoryHandler
 
       if (!server.documentId) throw new Error('No documentId');
 
-      // this.eventBus.publish(
-      //   new UpdateServerOwnerSucceedEvent({
-      //     data,
-      //     documentId,
-      //   }),
-      // );
+      this.eventBus.publish(
+        new UpdateServerCategorySucceedEvent({
+          data,
+          documentId,
+        }),
+      );
     } catch (error) {
       this.logger.error(error);
       //   this.eventBus.publish(

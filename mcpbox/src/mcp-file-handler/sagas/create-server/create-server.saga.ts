@@ -7,6 +7,7 @@ import { NewServerFoundEvent } from '../../events/new-server-found';
 import { CreateDraftServerSucceedEvent } from '../../events/create-draft-server-succeed';
 import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-overview-succeed';
 import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
+import { UpdateServerCategorySucceedEvent } from '../../events/update-server-category-succeed';
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
 import { UpdateServerOverviewCommand } from '../../commands/update-server-overview';
@@ -61,6 +62,16 @@ export class CreateServerSaga {
         tap(({ command }: UpdateServerCategoryCommand) =>
           this.logger.log(`Updating server category ${command.data.title}`),
         ),
+      ),
+      events$.pipe(
+        ofType(UpdateServerCategorySucceedEvent),
+        // map(
+        //   ({ event }: UpdateServerOwnerSucceedEvent) =>
+        //     new UpdateServerCategoryCommand(event),
+        // ),
+        // tap(({ command }: UpdateServerCategoryCommand) =>
+        //   this.logger.log(`Updating server category ${command.data.title}`),
+        // ),
       ),
     );
 

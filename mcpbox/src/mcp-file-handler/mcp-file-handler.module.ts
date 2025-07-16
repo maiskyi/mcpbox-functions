@@ -9,6 +9,7 @@ import { NewServerFoundHandler } from './events/new-server-found';
 import { CreateDraftServerSucceedHandler } from './events/create-draft-server-succeed';
 import { UpdateServerOverviewSucceedHandler } from './events/update-server-overview-succeed';
 import { UpdateServerOwnerSucceedHandler } from './events/update-server-owner-succeed';
+import { UpdateServerCategorySucceedHandler } from './events/update-server-category-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
@@ -26,6 +27,7 @@ import { UpdateServerCategoryHandler } from './commands/update-server-category';
     CreateDraftServerSucceedHandler,
     UpdateServerOverviewSucceedHandler,
     UpdateServerOwnerSucceedHandler,
+    UpdateServerCategorySucceedHandler,
     // Commands
     CreateDraftServerHandler,
     UpdateServerOverviewHandler,
