@@ -6,6 +6,7 @@ import { map, merge, Observable, tap } from 'rxjs';
 import { NewServerFoundEvent } from '../../events/new-server-found';
 import { CreateDraftServerSucceedEvent } from '../../events/create-draft-server-succeed';
 import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-overview-succeed';
+import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
 import { UpdateServerOverviewCommand } from '../../commands/update-server-overview';
@@ -44,6 +45,16 @@ export class CreateServerSaga {
         ofType(UpdateServerOverviewSucceedEvent),
         map(
           ({ event }: UpdateServerOverviewSucceedEvent) =>
+            new UpdateServerOwnerCommand(event),
+        ),
+        tap(({ command }: UpdateServerOwnerCommand) =>
+          this.logger.log(`Updating server owner ${command.data.title}`),
+        ),
+      ),
+      events$.pipe(
+        ofType(UpdateServerOwnerSucceedEvent),
+        map(
+          ({ event }: UpdateServerOwnerSucceedEvent) =>
             new UpdateServerOwnerCommand(event),
         ),
         tap(({ command }: UpdateServerOwnerCommand) =>
