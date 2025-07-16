@@ -13,6 +13,7 @@ import { CreateDraftServerCommand } from '../../commands/create-draft-server';
 import { UpdateServerOverviewCommand } from '../../commands/update-server-overview';
 import { UpdateServerOwnerCommand } from '../../commands/update-server-owner';
 import { UpdateServerCategoryCommand } from '../../commands/update-server-category';
+import { PublishServerCommand } from '../../commands/publish-server';
 
 @Injectable()
 export class CreateServerSaga {
@@ -65,80 +66,14 @@ export class CreateServerSaga {
       ),
       events$.pipe(
         ofType(UpdateServerCategorySucceedEvent),
-        // map(
-        //   ({ event }: UpdateServerOwnerSucceedEvent) =>
-        //     new UpdateServerCategoryCommand(event),
-        // ),
-        // tap(({ command }: UpdateServerCategoryCommand) =>
-        //   this.logger.log(`Updating server category ${command.data.title}`),
-        // ),
+        map(
+          ({ event }: UpdateServerOwnerSucceedEvent) =>
+            new PublishServerCommand(event),
+        ),
+        tap(({ command }: PublishServerCommand) =>
+          this.logger.log(`Publishing server ${command.data.title}`),
+        ),
       ),
     );
-
-    //   events$.pipe(
-    //     ofType(AssetsToUploadExistEvent),
-    //     map(
-    //       ({ event }: AssetsToUploadExistEvent) =>
-    //         new OverrideAssetsWithS3FilesCommand(event),
-    //     ),
-    //     tap(({ command }: OverrideAssetsWithS3FilesCommand) =>
-    //       this.logger.log(`Overriding survey assets...[${command.id}]`),
-    //     ),
-    //   ),
-    //   events$.pipe(
-    //     ofType(AssetsOverridingSucceededEvent),
-    //     map(
-    //       ({ event }: AssetsOverridingSucceededEvent) =>
-    //         new MarkSurveyAsCompletedCommand(event),
-    //     ),
-    //     tap(({ command }: MarkSurveyAsCompletedCommand) =>
-    //       this.logger.log(`Assets overriding succeeded...[${command.id}]`),
-    //     ),
-    //   ),
-    //   events$.pipe(
-    //     ofType(SurveyCompletionSucceededEvent),
-    //     map(
-    //       ({ event }: SurveyCompletionSucceededEvent) => new NoopCommand(event),
-    //     ),
-    //     tap(({ command }: NoopCommand) =>
-    //       this.logger.log(`Survey completion succeeded...[${command.id}]`),
-    //     ),
-    //   ),
-    //   events$.pipe(
-    //     ofType(CheckingFilesToUploadFailedEvent),
-    //     map(
-    //       ({ event }: CheckingFilesToUploadFailedEvent) =>
-    //         new MarkSurveyAsCompletedCommand(event),
-    //     ),
-    //     tap(({ command }: MarkSurveyAsCompletedCommand) =>
-    //       this.logger.log(
-    //         `Checking files to upload failed...[${command.id}]`,
-    //         command.error,
-    //       ),
-    //     ),
-    //   ),
-    //   events$.pipe(
-    //     ofType(SurveyCompletionFailedEvent),
-    //     map(({ event }: SurveyCompletionFailedEvent) => new NoopCommand(event)),
-    //     tap(({ command }: NoopCommand) =>
-    //       this.logger.log(
-    //         `Survey completion failed...[${command.id}]`,
-    //         command.error,
-    //       ),
-    //     ),
-    //   ),
-    //   events$.pipe(
-    //     ofType(AssetsOverridingFailedEvent),
-    //     map(
-    //       ({ event }: AssetsOverridingFailedEvent) =>
-    //         new MarkSurveyAsCompletedCommand(event),
-    //     ),
-    //     tap(({ command }: NoopCommand) =>
-    //       this.logger.log(
-    //         `Assets overriding failed...[${command.id}]`,
-    //         command.error,
-    //       ),
-    //     ),
-    //   ),
   }
 }

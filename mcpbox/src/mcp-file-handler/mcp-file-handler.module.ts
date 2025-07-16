@@ -15,6 +15,7 @@ import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
 import { UpdateServerOwnerHandler } from './commands/update-server-owner';
 import { UpdateServerCategoryHandler } from './commands/update-server-category';
+import { PublishServerHandler } from './commands/publish-server';
 
 @Module({
   providers: [
@@ -33,6 +34,7 @@ import { UpdateServerCategoryHandler } from './commands/update-server-category';
     UpdateServerOverviewHandler,
     UpdateServerOwnerHandler,
     UpdateServerCategoryHandler,
+    PublishServerHandler,
   ],
   exports: [McpFileHandlerService],
 })
