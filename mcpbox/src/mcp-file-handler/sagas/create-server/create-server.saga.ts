@@ -67,7 +67,7 @@ export class CreateServerSaga {
       events$.pipe(
         ofType(UpdateServerCategorySucceedEvent),
         map(
-          ({ event }: UpdateServerOwnerSucceedEvent) =>
+          ({ event }: UpdateServerCategorySucceedEvent) =>
             new PublishServerCommand(event),
         ),
         tap(({ command }: PublishServerCommand) =>

@@ -10,6 +10,7 @@ import { CreateDraftServerSucceedHandler } from './events/create-draft-server-su
 import { UpdateServerOverviewSucceedHandler } from './events/update-server-overview-succeed';
 import { UpdateServerOwnerSucceedHandler } from './events/update-server-owner-succeed';
 import { UpdateServerCategorySucceedHandler } from './events/update-server-category-succeed';
+import { PublishServerSucceedHandler } from './events/publish-server-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
@@ -29,6 +30,7 @@ import { PublishServerHandler } from './commands/publish-server';
     UpdateServerOverviewSucceedHandler,
     UpdateServerOwnerSucceedHandler,
     UpdateServerCategorySucceedHandler,
+    PublishServerSucceedHandler,
     // Commands
     CreateDraftServerHandler,
     UpdateServerOverviewHandler,
