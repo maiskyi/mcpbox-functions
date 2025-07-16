@@ -1,0 +1,9 @@
+mutation updateServer(
+  $documentId: ID!
+  $data: ServerInput!
+  $status: PublicationStatus = DRAFT
+) {
+  updateServer(documentId: $documentId, data: $data, status: $status) {
+    documentId
+  }
+}

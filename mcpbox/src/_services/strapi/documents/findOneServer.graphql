@@ -1,0 +1,5 @@
+query findOneServer($filters: ServerFiltersInput!) {
+  servers(filters: $filters, pagination: { limit: 1 }) {
+    documentId
+  }
+}
