@@ -1,4 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
 
 import { CreateDraftServerSucceedEvent } from './create-draft-server-succeed.event';
 
@@ -6,5 +7,11 @@ import { CreateDraftServerSucceedEvent } from './create-draft-server-succeed.eve
 export class CreateDraftServerSucceedHandler
   implements IEventHandler<CreateDraftServerSucceedEvent>
 {
-  public handle(_event: CreateDraftServerSucceedEvent) {}
+  private readonly logger = new Logger(CreateDraftServerSucceedHandler.name, {
+    timestamp: true,
+  });
+
+  public handle({ event }: CreateDraftServerSucceedEvent) {
+    this.logger.log(`Creating draft server: ${event.data.title} succeed`);
+  }
 }

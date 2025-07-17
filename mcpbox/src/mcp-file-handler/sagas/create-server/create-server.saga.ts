@@ -107,6 +107,9 @@ export class CreateServerSaga {
       map(([event]) => {
         return new PublishServerCommand(event);
       }),
+      tap(({ command }) =>
+        this.logger.log(`Publishing server: ${command.data.title}`),
+      ),
     );
 
     return merge(new$, draft$, readme$, combined$);

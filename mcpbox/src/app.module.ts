@@ -29,7 +29,6 @@ class AppModule {
     strapiSchemaUrl,
     openaiApiKey,
   }: AppConfig): DynamicModule {
-    console.log(openaiApiKey);
     return {
       global: true,
       module: AppModule,

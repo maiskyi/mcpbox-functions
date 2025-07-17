@@ -12,6 +12,6 @@ export class PublishServerSucceedHandler
   });
 
   public handle({ event: { data } }: PublishServerSucceedEvent) {
-    this.logger.log(`Server ${data.title} successfully published`);
+    this.logger.log(`Publishing server: ${data.title} succeed`);
   }
 }
