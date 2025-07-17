@@ -12,6 +12,6 @@ export class NewServerFoundHandler
   });
 
   public handle({ event }: NewServerFoundEvent) {
-    this.logger.log(`New server found ${event.data.title}`);
+    this.logger.log(`New server found: ${event.data.title}`);
   }
 }

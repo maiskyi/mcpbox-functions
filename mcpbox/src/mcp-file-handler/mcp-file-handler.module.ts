@@ -11,12 +11,14 @@ import { UpdateServerOverviewSucceedHandler } from './events/update-server-overv
 import { UpdateServerOwnerSucceedHandler } from './events/update-server-owner-succeed';
 import { UpdateServerCategorySucceedHandler } from './events/update-server-category-succeed';
 import { PublishServerSucceedHandler } from './events/publish-server-succeed';
+import { GetServerReadmeSucceedHandler } from './events/get-server-readme-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
 import { UpdateServerOwnerHandler } from './commands/update-server-owner';
 import { UpdateServerCategoryHandler } from './commands/update-server-category';
 import { PublishServerHandler } from './commands/publish-server';
+import { GetServerReadmeHandler } from './commands/get-server-readme';
 
 @Module({
   providers: [
@@ -31,12 +33,14 @@ import { PublishServerHandler } from './commands/publish-server';
     UpdateServerOwnerSucceedHandler,
     UpdateServerCategorySucceedHandler,
     PublishServerSucceedHandler,
+    GetServerReadmeSucceedHandler,
     // Commands
     CreateDraftServerHandler,
     UpdateServerOverviewHandler,
     UpdateServerOwnerHandler,
     UpdateServerCategoryHandler,
     PublishServerHandler,
+    GetServerReadmeHandler,
   ],
   exports: [McpFileHandlerService],
 })

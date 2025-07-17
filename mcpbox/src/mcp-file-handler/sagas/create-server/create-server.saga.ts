@@ -14,6 +14,7 @@ import { UpdateServerOverviewCommand } from '../../commands/update-server-overvi
 import { UpdateServerOwnerCommand } from '../../commands/update-server-owner';
 import { UpdateServerCategoryCommand } from '../../commands/update-server-category';
 import { PublishServerCommand } from '../../commands/publish-server';
+import { GetServerReadmeCommand } from '../../commands/get-server-readme';
 
 @Injectable()
 export class CreateServerSaga {
@@ -37,10 +38,10 @@ export class CreateServerSaga {
       ofType(CreateDraftServerSucceedEvent),
       map(
         ({ event }: CreateDraftServerSucceedEvent) =>
-          new UpdateServerOverviewCommand(event),
+          new GetServerReadmeCommand(event),
       ),
-      tap(({ command }: UpdateServerOverviewCommand) =>
-        this.logger.log(`Updating server overview: ${command.data.title}`),
+      tap(({ command }: GetServerReadmeCommand) =>
+        this.logger.log(`Getting server ReadMe: ${command.data.title}`),
       ),
     );
 
