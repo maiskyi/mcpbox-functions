@@ -1,4 +1,4 @@
-import { INestApplicationContext, Module } from '@nestjs/common';
+import { DynamicModule, INestApplicationContext, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { FirebaseAdminModule } from '@services/firebase-admin';
@@ -7,6 +7,7 @@ import { StrapiModule } from '@services/strapi';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { McpFileHandlerModule } from './mcp-file-handler';
+import { AppConfig } from './app.types';
 
 @Module({
   imports: [
@@ -15,22 +16,38 @@ import { McpFileHandlerModule } from './mcp-file-handler';
     // Services
     FirebaseAdminModule,
     FirebaseStorageModule.forRoot(),
-    StrapiModule.forRoot({
-      apiToken: process.env.STRAPI_API_TOKEN,
-      schemaUrl: process.env.STRAPI_SCHEMA_URL,
-    }),
     // Features
     McpFileHandlerModule,
   ],
 })
-class AppModule {}
+class AppModule {
+  public static forRoot({
+    strapiApiToken,
+    strapiSchemaUrl,
+  }: AppConfig): DynamicModule {
+    return {
+      global: true,
+      module: AppModule,
+      imports: [
+        StrapiModule.forRoot({
+          apiToken: strapiApiToken,
+          schemaUrl: strapiSchemaUrl,
+        }),
+      ],
+    };
+  }
+}
 
 export class HandlersModule {
   private static _app: INestApplicationContext;
 
-  public static async getApp(): Promise<INestApplicationContext> {
+  public static async getApp(
+    config: AppConfig,
+  ): Promise<INestApplicationContext> {
     if (!this._app) {
-      this._app = await NestFactory.createApplicationContext(AppModule);
+      this._app = await NestFactory.createApplicationContext(
+        AppModule.forRoot(config),
+      );
     }
     return this._app;
   }
