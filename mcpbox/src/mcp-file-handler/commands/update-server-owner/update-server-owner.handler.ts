@@ -1,6 +1,7 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
+import { GithubClientService } from '@services/github';
 
 import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
 
@@ -17,12 +18,19 @@ export class UpdateServerOwnerHandler
   public constructor(
     private eventBus: EventBus,
     private strapi: StrapiClientService,
+    private github: GithubClientService,
   ) {}
 
   public async execute({
     command: { data, documentId },
   }: UpdateServerOwnerCommand) {
     try {
+      const { data: repo } = await this.github.getRepoBySourceCodeUrl({
+        url: data.githubUrl,
+      });
+
+      console.log(repo);
+
       const server = await this.strapi.servers.update({
         documentId,
         data: {

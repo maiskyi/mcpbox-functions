@@ -5,6 +5,7 @@ import { FirebaseAdminModule } from '@services/firebase-admin';
 import { FirebaseStorageModule } from '@services/firebase-storage';
 import { StrapiModule } from '@services/strapi';
 import { CqrsModule } from '@nestjs/cqrs';
+import { GithubModule } from '@services/github';
 
 import { McpFileHandlerModule } from './mcp-file-handler';
 import { AppConfig } from './app.types';
@@ -14,6 +15,7 @@ import { AppConfig } from './app.types';
     ConfigModule.forRoot(),
     CqrsModule.forRoot(),
     // Services
+    GithubModule,
     FirebaseAdminModule,
     FirebaseStorageModule.forRoot(),
     // Features
