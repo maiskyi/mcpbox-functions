@@ -29,22 +29,24 @@ export class CreateServerSaga {
         ({ event }: NewServerFoundEvent) => new CreateDraftServerCommand(event),
       ),
       tap(({ command }: CreateDraftServerCommand) =>
-        this.logger.log(`Creating draft server ${command.data.title}`),
+        this.logger.log(`Creating draft server: ${command.data.title}`),
+      ),
+    );
+
+    const draft$ = events$.pipe(
+      ofType(CreateDraftServerSucceedEvent),
+      map(
+        ({ event }: CreateDraftServerSucceedEvent) =>
+          new UpdateServerOverviewCommand(event),
+      ),
+      tap(({ command }: UpdateServerOverviewCommand) =>
+        this.logger.log(`Updating server overview: ${command.data.title}`),
       ),
     );
 
     return merge(
       new$,
-      // events$.pipe(
-      //   ofType(CreateDraftServerSucceedEvent),
-      //   map(
-      //     ({ event }: CreateDraftServerSucceedEvent) =>
-      //       new UpdateServerOverviewCommand(event),
-      //   ),
-      //   tap(({ command }: UpdateServerOverviewCommand) =>
-      //     this.logger.log(`Updating server overview ${command.data.title}`),
-      //   ),
-      // ),
+      draft$,
       // events$.pipe(
       //   ofType(UpdateServerOverviewSucceedEvent),
       //   map(
