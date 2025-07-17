@@ -40,12 +40,6 @@ export class UpdateServerCategoryHandler
       );
     } catch (error) {
       this.logger.error(error);
-      //   this.eventBus.publish(
-      //     new CheckingFilesToUploadFailedEvent({
-      //       ...command,
-      //       error,
-      //     }),
-      //   );
     }
   }
 }
