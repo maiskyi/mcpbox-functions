@@ -7,12 +7,7 @@ import { OpenAIService } from '@services/openai';
 import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-overview-succeed';
 
 import { UpdateServerOverviewCommand } from './update-server-overview.command';
-import {
-  SYSTEM_PROMPT,
-  USER_PROMPT_1,
-  USER_PROMPT_2,
-  USER_PROMPT_3,
-} from './update-server-overview.const';
+import { GenOverviewParams } from './update-server-overview.types';
 
 @CommandHandler(UpdateServerOverviewCommand)
 export class UpdateServerOverviewHandler
@@ -29,6 +24,45 @@ export class UpdateServerOverviewHandler
     private openai: OpenAIService,
   ) {}
 
+  private async genOverview({ content }: GenOverviewParams) {
+    const { choices } = await this.openai.chat.completions.create({
+      model: 'gpt-4.1-nano',
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a technical assistant that summarizes GitHub README files.',
+        },
+        {
+          role: 'user',
+          content: 'Create summary for the following GitHub README:',
+        },
+        {
+          role: 'user',
+          content: content,
+        },
+        {
+          role: 'user',
+          content:
+            'Summary should use markdown format. Do not use emojis, tables. Use following template for output:',
+        },
+        {
+          role: 'user',
+          content: `
+            ### What is {name}?
+            ### How to use {name}?
+            ### Key features of {name}?
+            ### Use cases of {name}?
+          `,
+        },
+      ],
+    });
+
+    return {
+      overview: choices[0].message.content,
+    };
+  }
+
   public async execute({
     command: { data, documentId },
   }: UpdateServerOverviewCommand) {
@@ -40,36 +74,12 @@ export class UpdateServerOverviewHandler
 
       const content = Buffer.from(readme.content, 'base64').toString('utf-8');
 
-      const { choices } = await this.openai.chat.completions.create({
-        model: 'gpt-4o',
-        messages: [
-          {
-            role: 'system',
-            content: SYSTEM_PROMPT,
-          },
-          {
-            role: 'user',
-            content: USER_PROMPT_1,
-          },
-          {
-            role: 'user',
-            content: content,
-          },
-          {
-            role: 'user',
-            content: USER_PROMPT_2,
-          },
-          {
-            role: 'user',
-            content: USER_PROMPT_3,
-          },
-        ],
-      });
+      const [{ overview }] = await Promise.all([this.genOverview({ content })]);
 
       const server = await this.strapi.servers.update({
         documentId,
         data: {
-          Overview: choices[0].message.content,
+          Overview: overview,
         },
       });
 
@@ -83,12 +93,6 @@ export class UpdateServerOverviewHandler
       );
     } catch (error) {
       this.logger.error(error);
-      //   this.eventBus.publish(
-      //     new CheckingFilesToUploadFailedEvent({
-      //       ...command,
-      //       error,
-      //     }),
-      //   );
     }
   }
 }
