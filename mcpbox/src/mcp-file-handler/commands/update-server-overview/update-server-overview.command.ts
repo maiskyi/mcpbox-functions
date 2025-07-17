@@ -5,6 +5,7 @@ import { FileSchema } from '../../types';
 interface UpdateServerOverviewCommandType {
   data: FileSchema;
   documentId: string;
+  readme: string;
 }
 
 export class UpdateServerOverviewCommand extends Command<void> {

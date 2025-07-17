@@ -1,4 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
 
 import { UpdateServerOverviewSucceedEvent } from './update-server-overview-succeed.event';
 
@@ -6,5 +7,14 @@ import { UpdateServerOverviewSucceedEvent } from './update-server-overview-succe
 export class UpdateServerOverviewSucceedHandler
   implements IEventHandler<UpdateServerOverviewSucceedEvent>
 {
-  public handle(_event: UpdateServerOverviewSucceedEvent) {}
+  private readonly logger = new Logger(
+    UpdateServerOverviewSucceedHandler.name,
+    {
+      timestamp: true,
+    },
+  );
+
+  public handle({ event: { data } }: UpdateServerOverviewSucceedEvent) {
+    this.logger.log(`Updating server overview: ${data.title} succeed`);
+  }
 }

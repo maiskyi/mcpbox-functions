@@ -1,4 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
 
 import { UpdateServerOwnerSucceedEvent } from './update-server-owner-succeed.event';
 
@@ -6,5 +7,11 @@ import { UpdateServerOwnerSucceedEvent } from './update-server-owner-succeed.eve
 export class UpdateServerOwnerSucceedHandler
   implements IEventHandler<UpdateServerOwnerSucceedEvent>
 {
-  public handle(_event: UpdateServerOwnerSucceedEvent) {}
+  private readonly logger = new Logger(UpdateServerOwnerSucceedHandler.name, {
+    timestamp: true,
+  });
+
+  public handle({ event: { data } }: UpdateServerOwnerSucceedEvent) {
+    this.logger.log(`Updating server owner: ${data.title} succeed`);
+  }
 }

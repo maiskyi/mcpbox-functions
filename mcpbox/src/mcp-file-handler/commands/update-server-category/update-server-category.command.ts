@@ -5,6 +5,7 @@ import { FileSchema } from '../../types';
 interface UpdateServerCategoryCommandType {
   data: FileSchema;
   documentId: string;
+  readme: string;
 }
 
 export class UpdateServerCategoryCommand extends Command<void> {

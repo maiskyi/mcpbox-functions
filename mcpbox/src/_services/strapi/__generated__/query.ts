@@ -1334,6 +1334,14 @@ export type UsersPermissionsUserRelationResponseCollection = {
   nodes: Array<UsersPermissionsUser>;
 };
 
+export type FindManyServerCategoriesQueryVariables = Exact<{
+  filters?: InputMaybe<ServerCategoryFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+}>;
+
+
+export type FindManyServerCategoriesQuery = { __typename?: 'Query', serverCategories: Array<{ __typename?: 'ServerCategory', Title: string, documentId: string } | null> };
+
 export type CreateServerMutationVariables = Exact<{
   data: ServerInput;
   status?: InputMaybe<PublicationStatus>;
@@ -1367,6 +1375,14 @@ export type UpdateServerMutationVariables = Exact<{
 export type UpdateServerMutation = { __typename?: 'Mutation', updateServer?: { __typename?: 'Server', documentId: string } | null };
 
 
+export const FindManyServerCategories = gql`
+    query findManyServerCategories($filters: ServerCategoryFiltersInput, $pagination: PaginationArg) {
+  serverCategories(filters: $filters, pagination: $pagination, status: PUBLISHED) {
+    Title
+    documentId
+  }
+}
+    `;
 export const CreateServer = gql`
     mutation createServer($data: ServerInput!, $status: PublicationStatus = DRAFT) {
   createServer(data: $data, status: $status) {

@@ -6,9 +6,10 @@ import { StrapiModuleConfig } from './strapi.types';
 import { GqlClientService } from './services/gql-client';
 import { StrapiClientService } from './services/strapi-client';
 import { ServersService } from './services/servers';
+import { ServerCategoriesService } from './services/server-categories';
 
 @Module({
-  providers: [StrapiClientService, ServersService],
+  providers: [StrapiClientService, ServersService, ServerCategoriesService],
   exports: [StrapiClientService],
 })
 export class StrapiModule {
@@ -30,9 +31,7 @@ export class StrapiModule {
                 Authorization: `Bearer ${apiToken}`,
               },
             }),
-            cache: new InMemoryCache({
-              resultCaching: false,
-            }),
+            cache: new InMemoryCache({}),
           }),
         },
       ],
