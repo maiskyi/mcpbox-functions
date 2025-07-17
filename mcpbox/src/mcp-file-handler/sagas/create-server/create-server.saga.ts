@@ -83,53 +83,32 @@ export class CreateServerSaga {
       }),
     );
 
-    // const combined$ = combineLatest([owner$]).pipe(
-    //   filter(([owner]) =>
-    //     [owner.command.documentId].every((id, _, arr) => id === arr[0]),
-    //   ),
-    //   map(([{}]) => {
-    //     return new PublishServerCommand({
-    //       serverId: overview.serverId,
-    //       title: overview.title,
-    //       // ...you can merge data from all three
-    //     });
-    //   }),
-    // );
-
-    return merge(
-      new$,
-      draft$,
-      readme$,
-      // events$.pipe(
-      //   ofType(UpdateServerOverviewSucceedEvent),
-      //   map(
-      //     ({ event }: UpdateServerOverviewSucceedEvent) =>
-      //       new UpdateServerOwnerCommand(event),
-      //   ),
-      //   tap(({ command }: UpdateServerOwnerCommand) =>
-      //     this.logger.log(`Updating server owner ${command.data.title}`),
-      //   ),
-      // ),
-      // events$.pipe(
-      //   ofType(UpdateServerOwnerSucceedEvent),
-      //   map(
-      //     ({ event }: UpdateServerOwnerSucceedEvent) =>
-      //       new UpdateServerCategoryCommand(event),
-      //   ),
-      //   tap(({ command }: UpdateServerCategoryCommand) =>
-      //     this.logger.log(`Updating server category ${command.data.title}`),
-      //   ),
-      // ),
-      // events$.pipe(
-      //   ofType(UpdateServerCategorySucceedEvent),
-      //   map(
-      //     ({ event }: UpdateServerCategorySucceedEvent) =>
-      //       new PublishServerCommand(event),
-      //   ),
-      //   tap(({ command }: PublishServerCommand) =>
-      //     this.logger.log(`Publishing server ${command.data.title}`),
-      //   ),
-      // ),
+    const owner$ = events$.pipe(
+      ofType(UpdateServerOwnerSucceedEvent),
+      map(({ event }: UpdateServerOwnerSucceedEvent) => event),
     );
+
+    const overview$ = events$.pipe(
+      ofType(UpdateServerOverviewSucceedEvent),
+      map(({ event }: UpdateServerOverviewSucceedEvent) => event),
+    );
+
+    const category$ = events$.pipe(
+      ofType(UpdateServerCategorySucceedEvent),
+      map(({ event }: UpdateServerCategorySucceedEvent) => event),
+    );
+
+    const combined$ = combineLatest([owner$, overview$, category$]).pipe(
+      filter(([owner, overview, category]) =>
+        [owner.documentId, overview.documentId, category.documentId].every(
+          (id, _, arr) => id === arr[0],
+        ),
+      ),
+      map(([event]) => {
+        return new PublishServerCommand(event);
+      }),
+    );
+
+    return merge(new$, draft$, readme$, combined$);
   }
 }
