@@ -7,7 +7,10 @@ import { OpenAIService } from '@services/openai';
 import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-overview-succeed';
 
 import { UpdateServerOverviewCommand } from './update-server-overview.command';
-import { GenOverviewParams } from './update-server-overview.types';
+import {
+  GenOverviewParams,
+  GenCategoryParams,
+} from './update-server-overview.types';
 
 @CommandHandler(UpdateServerOverviewCommand)
 export class UpdateServerOverviewHandler
@@ -23,6 +26,47 @@ export class UpdateServerOverviewHandler
     private github: GithubClientService,
     private openai: OpenAIService,
   ) {}
+
+  private async genCategory({ content }: GenCategoryParams) {
+    const { serverCategories } = await this.strapi.serverCategories.findMany({
+      pagination: {
+        limit: 9999,
+      },
+    });
+
+    const { choices } = await this.openai.chat.completions.create({
+      model: 'gpt-4.1-nano',
+      messages: [
+        {
+          role: 'system',
+          content: `You are an AI assistant that classifies MCP Servers into high-level categories.`,
+        },
+        {
+          role: 'user',
+          content: `
+            Here is the list of available categories (in JSON):
+            ${JSON.stringify(serverCategories, null, 2)}
+            And here is the README of an MCP server:
+            ${content}
+            Please reply with the most appropriate category \`documentId\` (from the JSON above) that matches the server's purpose.
+            Respond only with the documentId.
+            If there is no good match respond with \`documentId\` for Other category.
+            Output should be a string.
+          `,
+        },
+      ],
+    });
+
+    const suggestedDocumentId = choices[0].message.content;
+
+    const documentId = serverCategories.find((item) => {
+      return item ? item.documentId === suggestedDocumentId : false;
+    })?.documentId;
+
+    if (documentId) return { category: documentId };
+
+    return { category: choices[0].message.content };
+  }
 
   private async genOverview({ content }: GenOverviewParams) {
     const { choices } = await this.openai.chat.completions.create({
@@ -74,12 +118,16 @@ export class UpdateServerOverviewHandler
 
       const content = Buffer.from(readme.content, 'base64').toString('utf-8');
 
-      const [{ overview }] = await Promise.all([this.genOverview({ content })]);
+      const [{ overview }, { category }] = await Promise.all([
+        this.genOverview({ content }),
+        this.genCategory({ content }),
+      ]);
 
       const server = await this.strapi.servers.update({
         documentId,
         data: {
           Overview: overview,
+          Category: category,
         },
       });
 

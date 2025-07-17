@@ -26,7 +26,7 @@ export class UpdateServerCategoryHandler
       const server = await this.strapi.servers.update({
         documentId,
         data: {
-          Category: 'r128c7nfg17dwl99wh1yhdgx',
+          // Category: 'r128c7nfg17dwl99wh1yhdgx',
         },
       });
 

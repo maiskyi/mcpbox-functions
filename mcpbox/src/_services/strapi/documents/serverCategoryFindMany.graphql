@@ -1,0 +1,13 @@
+query findManyServerCategories(
+  $filters: ServerCategoryFiltersInput
+  $pagination: PaginationArg
+) {
+  serverCategories(
+    filters: $filters
+    pagination: $pagination
+    status: PUBLISHED
+  ) {
+    Title
+    documentId
+  }
+}
