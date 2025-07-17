@@ -15,7 +15,7 @@ import { AppConfig } from './app.types';
     ConfigModule.forRoot(),
     CqrsModule.forRoot(),
     // Services
-    GithubModule,
+    GithubModule.forRootAsync(),
     FirebaseAdminModule,
     FirebaseStorageModule.forRoot(),
     // Features

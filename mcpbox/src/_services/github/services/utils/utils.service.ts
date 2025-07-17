@@ -4,7 +4,7 @@ import { ParseSourceCodeUrlParams } from './utils.types';
 
 @Injectable()
 export class UtilsService {
-  public parseSourceCodeUrl({ url }: ParseSourceCodeUrlParams) {
+  public static parseSourceCodeUrl({ url }: ParseSourceCodeUrlParams) {
     const match = url.match(
       /^https:\/\/github\.com\/([^/]+)\/([^/]+)(?:\/tree\/([^/]+)\/(.+))?$/,
     );
