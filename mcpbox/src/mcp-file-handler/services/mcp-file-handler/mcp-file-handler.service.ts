@@ -69,14 +69,14 @@ export class McpFileHandlerService {
         },
       });
 
-      if (!server) {
-        this.eventBus.publish(
-          new NewServerFoundEvent({
-            data,
-          }),
-        );
-        return;
-      }
+      // if (!server) {
+      this.eventBus.publish(
+        new NewServerFoundEvent({
+          data,
+        }),
+      );
+      return;
+      // }
     } catch (error) {
       this.logger.error(error);
     }
