@@ -6,6 +6,7 @@ import { FirebaseStorageModule } from '@services/firebase-storage';
 import { StrapiModule } from '@services/strapi';
 import { CqrsModule } from '@nestjs/cqrs';
 import { GithubModule } from '@services/github';
+import { OpenAIModule } from '@services/openai';
 
 import { McpFileHandlerModule } from './mcp-file-handler';
 import { AppConfig } from './app.types';
@@ -26,11 +27,15 @@ class AppModule {
   public static forRoot({
     strapiApiToken,
     strapiSchemaUrl,
+    openaiApiKey,
   }: AppConfig): DynamicModule {
     return {
       global: true,
       module: AppModule,
       imports: [
+        OpenAIModule.forRoot({
+          apiKey: openaiApiKey,
+        }),
         StrapiModule.forRoot({
           apiToken: strapiApiToken,
           schemaUrl: strapiSchemaUrl,
