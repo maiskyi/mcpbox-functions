@@ -8,7 +8,7 @@ export const strapiApiToken = defineSecret('STRAPI_API_TOKEN');
 
 export const strapiSchemaUrl = defineSecret('STRAPI_SCHEMA_URL');
 
-export const openaiApiKey = defineSecret('STRAPI_SCHEMA_URL');
+export const openaiApiKey = defineSecret('OPENAI_API_KEY');
 
 export const handleOnMcpFileCreatedUpdated = onObjectFinalized(
   {

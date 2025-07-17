@@ -4,7 +4,10 @@ import { Repos } from '../../__generated__/Repos';
 import { UtilsService } from '../utils';
 import { HttpClientService } from '../http-client';
 
-import { ReposGetBySourceCodeUrlParams } from './repos.types';
+import {
+  ReposGetBySourceCodeUrlParams,
+  ReposGetReadmeBySourceCodeUrl,
+} from './repos.types';
 
 @Injectable()
 export class ReposService extends Repos {
@@ -28,6 +31,28 @@ export class ReposService extends Repos {
       if (!owner || !repo) throw new Error('No source code owner or repo');
 
       const data = await this.reposGet(owner, repo);
+
+      return { data };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async reposGetReadmeBySourceCodeUrl({
+    url,
+  }: ReposGetReadmeBySourceCodeUrl) {
+    try {
+      const { owner, repo, branch, path } = this.utils.parseSourceCodeUrl({
+        url,
+      });
+
+      if (!owner || !repo) throw new Error('No source code owner or repo');
+
+      const data = await this.reposGetReadme({
+        owner,
+        repo,
+      });
 
       return { data };
     } catch (error) {
