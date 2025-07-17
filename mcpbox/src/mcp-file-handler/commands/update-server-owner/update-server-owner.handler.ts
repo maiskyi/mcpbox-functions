@@ -25,16 +25,14 @@ export class UpdateServerOwnerHandler
     command: { data, documentId },
   }: UpdateServerOwnerCommand) {
     try {
-      const { data: repo } = await this.github.getRepoBySourceCodeUrl({
+      const { data: repo } = await this.github.repos.reposGetBySourceCodeUrl({
         url: data.githubUrl,
       });
-
-      console.log(repo);
 
       const server = await this.strapi.servers.update({
         documentId,
         data: {
-          GitHubOwner: 'test',
+          GitHubOwner: repo.owner.login,
         },
       });
 
@@ -48,12 +46,6 @@ export class UpdateServerOwnerHandler
       );
     } catch (error) {
       this.logger.error(error);
-      //   this.eventBus.publish(
-      //     new CheckingFilesToUploadFailedEvent({
-      //       ...command,
-      //       error,
-      //     }),
-      //   );
     }
   }
 }
