@@ -23,57 +23,58 @@ export class CreateServerSaga {
 
   @Saga()
   public generate(events$: Observable<any>): Observable<ICommand> {
+    const new$ = events$.pipe(
+      ofType(NewServerFoundEvent),
+      map(
+        ({ event }: NewServerFoundEvent) => new CreateDraftServerCommand(event),
+      ),
+      tap(({ command }: CreateDraftServerCommand) =>
+        this.logger.log(`Creating draft server ${command.data.title}`),
+      ),
+    );
+
     return merge(
-      events$.pipe(
-        ofType(NewServerFoundEvent),
-        map(
-          ({ event }: NewServerFoundEvent) =>
-            new CreateDraftServerCommand(event),
-        ),
-        tap(({ command }: CreateDraftServerCommand) =>
-          this.logger.log(`Creating draft server ${command.data.title}`),
-        ),
-      ),
-      events$.pipe(
-        ofType(CreateDraftServerSucceedEvent),
-        map(
-          ({ event }: CreateDraftServerSucceedEvent) =>
-            new UpdateServerOverviewCommand(event),
-        ),
-        tap(({ command }: UpdateServerOverviewCommand) =>
-          this.logger.log(`Updating server overview ${command.data.title}`),
-        ),
-      ),
-      events$.pipe(
-        ofType(UpdateServerOverviewSucceedEvent),
-        map(
-          ({ event }: UpdateServerOverviewSucceedEvent) =>
-            new UpdateServerOwnerCommand(event),
-        ),
-        tap(({ command }: UpdateServerOwnerCommand) =>
-          this.logger.log(`Updating server owner ${command.data.title}`),
-        ),
-      ),
-      events$.pipe(
-        ofType(UpdateServerOwnerSucceedEvent),
-        map(
-          ({ event }: UpdateServerOwnerSucceedEvent) =>
-            new UpdateServerCategoryCommand(event),
-        ),
-        tap(({ command }: UpdateServerCategoryCommand) =>
-          this.logger.log(`Updating server category ${command.data.title}`),
-        ),
-      ),
-      events$.pipe(
-        ofType(UpdateServerCategorySucceedEvent),
-        map(
-          ({ event }: UpdateServerCategorySucceedEvent) =>
-            new PublishServerCommand(event),
-        ),
-        tap(({ command }: PublishServerCommand) =>
-          this.logger.log(`Publishing server ${command.data.title}`),
-        ),
-      ),
+      new$,
+      // events$.pipe(
+      //   ofType(CreateDraftServerSucceedEvent),
+      //   map(
+      //     ({ event }: CreateDraftServerSucceedEvent) =>
+      //       new UpdateServerOverviewCommand(event),
+      //   ),
+      //   tap(({ command }: UpdateServerOverviewCommand) =>
+      //     this.logger.log(`Updating server overview ${command.data.title}`),
+      //   ),
+      // ),
+      // events$.pipe(
+      //   ofType(UpdateServerOverviewSucceedEvent),
+      //   map(
+      //     ({ event }: UpdateServerOverviewSucceedEvent) =>
+      //       new UpdateServerOwnerCommand(event),
+      //   ),
+      //   tap(({ command }: UpdateServerOwnerCommand) =>
+      //     this.logger.log(`Updating server owner ${command.data.title}`),
+      //   ),
+      // ),
+      // events$.pipe(
+      //   ofType(UpdateServerOwnerSucceedEvent),
+      //   map(
+      //     ({ event }: UpdateServerOwnerSucceedEvent) =>
+      //       new UpdateServerCategoryCommand(event),
+      //   ),
+      //   tap(({ command }: UpdateServerCategoryCommand) =>
+      //     this.logger.log(`Updating server category ${command.data.title}`),
+      //   ),
+      // ),
+      // events$.pipe(
+      //   ofType(UpdateServerCategorySucceedEvent),
+      //   map(
+      //     ({ event }: UpdateServerCategorySucceedEvent) =>
+      //       new PublishServerCommand(event),
+      //   ),
+      //   tap(({ command }: PublishServerCommand) =>
+      //     this.logger.log(`Publishing server ${command.data.title}`),
+      //   ),
+      // ),
     );
   }
 }

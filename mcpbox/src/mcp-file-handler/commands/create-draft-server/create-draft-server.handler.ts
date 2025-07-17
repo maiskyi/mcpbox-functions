@@ -42,12 +42,6 @@ export class CreateDraftServerHandler
       );
     } catch (error) {
       this.logger.error(error);
-      //   this.eventBus.publish(
-      //     new CheckingFilesToUploadFailedEvent({
-      //       ...command,
-      //       error,
-      //     }),
-      //   );
     }
   }
 }
