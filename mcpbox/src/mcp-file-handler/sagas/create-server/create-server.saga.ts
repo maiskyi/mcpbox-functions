@@ -25,6 +25,7 @@ import { UpdateServerOwnerCommand } from '../../commands/update-server-owner';
 import { UpdateServerCategoryCommand } from '../../commands/update-server-category';
 import { PublishServerCommand } from '../../commands/publish-server';
 import { GetServerReadmeCommand } from '../../commands/get-server-readme';
+import { UpdateServerLogoCommand } from '../../commands/update-server-logo';
 
 @Injectable()
 export class CreateServerSaga {
@@ -46,13 +47,20 @@ export class CreateServerSaga {
 
     const draft$ = events$.pipe(
       ofType(CreateDraftServerSucceedEvent),
-      map(
-        ({ event }: CreateDraftServerSucceedEvent) =>
+      mergeMap(({ event }: CreateDraftServerSucceedEvent) => {
+        return from([
           new GetServerReadmeCommand(event),
-      ),
-      tap(({ command }: GetServerReadmeCommand) =>
-        this.logger.log(`Getting server ReadMe: ${command.data.title}`),
-      ),
+          new UpdateServerLogoCommand(event),
+        ]);
+      }),
+      tap(({ command }) => {
+        if (command.constructor.name === GetServerReadmeCommand.name) {
+          this.logger.log(`Getting server ReadMe: ${command.data.title}`);
+        }
+        if (command.constructor.name === UpdateServerLogoCommand.name) {
+          this.logger.log(`Updating server logo: ${command.data.title}`);
+        }
+      }),
     );
 
     const readme$ = events$.pipe(

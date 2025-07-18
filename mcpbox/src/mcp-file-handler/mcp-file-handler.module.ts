@@ -19,6 +19,7 @@ import { UpdateServerOwnerHandler } from './commands/update-server-owner';
 import { UpdateServerCategoryHandler } from './commands/update-server-category';
 import { PublishServerHandler } from './commands/publish-server';
 import { GetServerReadmeHandler } from './commands/get-server-readme';
+import { UpdateServerLogoHandler } from './commands/update-server-logo';
 
 @Module({
   providers: [
@@ -41,6 +42,7 @@ import { GetServerReadmeHandler } from './commands/get-server-readme';
     UpdateServerCategoryHandler,
     PublishServerHandler,
     GetServerReadmeHandler,
+    UpdateServerLogoHandler,
   ],
   exports: [McpFileHandlerService],
 })
