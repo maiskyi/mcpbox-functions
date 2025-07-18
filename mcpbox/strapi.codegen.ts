@@ -15,7 +15,7 @@ const config: CodegenConfig = {
   ],
   ignoreNoDocuments: true,
   generates: {
-    './src/_services/strapi/__generated__/query.ts': {
+    './src/_services/strapi/__generated__/gql/query.ts': {
       config: {
         documentVariableSuffix: 'Document',
       },

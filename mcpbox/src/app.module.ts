@@ -28,6 +28,7 @@ class AppModule {
     strapiApiToken,
     strapiSchemaUrl,
     openaiApiKey,
+    strapiBaseUrl,
   }: AppConfig): DynamicModule {
     return {
       global: true,
@@ -39,6 +40,7 @@ class AppModule {
         StrapiModule.forRoot({
           apiToken: strapiApiToken,
           schemaUrl: strapiSchemaUrl,
+          baseUrl: strapiBaseUrl,
         }),
       ],
     };

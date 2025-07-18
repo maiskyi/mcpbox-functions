@@ -13,7 +13,7 @@ import {
   FindManyServers,
   FindManyServersQuery,
   FindManyServersQueryVariables,
-} from '../../__generated__/query';
+} from '../../__generated__/gql/query';
 import { GqlClientService } from '../gql-client';
 
 @Injectable()

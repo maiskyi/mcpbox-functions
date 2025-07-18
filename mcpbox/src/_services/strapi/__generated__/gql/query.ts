@@ -952,6 +952,7 @@ export type Server = {
 
 export type ServerCategory = {
   __typename?: 'ServerCategory';
+  Default?: Maybe<Scalars['Boolean']['output']>;
   Icon: Scalars['JSON']['output'];
   Slug: Scalars['String']['output'];
   Title: Scalars['String']['output'];
@@ -968,6 +969,7 @@ export type ServerCategoryEntityResponseCollection = {
 };
 
 export type ServerCategoryFiltersInput = {
+  Default?: InputMaybe<BooleanFilterInput>;
   Icon?: InputMaybe<JsonFilterInput>;
   Slug?: InputMaybe<StringFilterInput>;
   Title?: InputMaybe<StringFilterInput>;
@@ -981,6 +983,7 @@ export type ServerCategoryFiltersInput = {
 };
 
 export type ServerCategoryInput = {
+  Default?: InputMaybe<Scalars['Boolean']['input']>;
   Icon?: InputMaybe<Scalars['JSON']['input']>;
   Slug?: InputMaybe<Scalars['String']['input']>;
   Title?: InputMaybe<Scalars['String']['input']>;
