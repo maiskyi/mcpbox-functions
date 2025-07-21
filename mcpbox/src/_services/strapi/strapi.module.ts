@@ -7,20 +7,35 @@ import { GqlClientService } from './services/gql-client';
 import { StrapiClientService } from './services/strapi-client';
 import { ServersService } from './services/servers';
 import { ServerCategoriesService } from './services/server-categories';
+import { HttpClientService } from './services/http-client';
+import { UploadService } from './services/upload';
 
 @Module({
-  providers: [StrapiClientService, ServersService, ServerCategoriesService],
+  providers: [
+    StrapiClientService,
+    ServersService,
+    ServerCategoriesService,
+    UploadService,
+  ],
   exports: [StrapiClientService],
 })
 export class StrapiModule {
   public static forRoot({
     schemaUrl,
     apiToken,
+    baseUrl,
   }: StrapiModuleConfig): DynamicModule {
     return {
       global: true,
       module: StrapiModule,
       providers: [
+        {
+          provide: HttpClientService,
+          useValue: new HttpClientService({
+            apiToken,
+            baseURL: baseUrl,
+          }),
+        },
         {
           provide: GqlClientService,
           useValue: new GqlClientService({

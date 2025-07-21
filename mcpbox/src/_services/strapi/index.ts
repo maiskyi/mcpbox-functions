@@ -1,4 +1,4 @@
-import * as DTO from './__generated__/query';
+import * as DTO from './__generated__/gql/query';
 
 // Module
 export { StrapiModule } from './strapi.module';

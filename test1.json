@@ -1,6 +1,7 @@
 {
   "isOfficial": true,
-  "title": "Namecheap Domains -Search/Register",
+  "title": "Test 1",
+  "logo": "https://storage.googleapis.com/mcpbox-strapi-local/app_icon_12_20_19_c2e0a3cbae/app_icon_12_20_19_c2e0a3cbae.png",
   "githubUrl": "https://github.com/brightdata/brightdata-mcp",
   "description": "Let your AI help you find the best domain! Check availability and get costs in one shot and heck, even have your AI register your shiny new domain for you!",
   "tools": [
