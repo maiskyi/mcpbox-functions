@@ -32,6 +32,7 @@ export class StrapiModule {
         {
           provide: HttpClientService,
           useValue: new HttpClientService({
+            apiToken,
             baseURL: baseUrl,
           }),
         },

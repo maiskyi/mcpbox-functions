@@ -26,13 +26,20 @@ export class UpdateServerLogoHandler
   }: UpdateServerLogoCommand) {
     try {
       if (data.logo) {
-        const [{ id }] = await this.strapi.upload.uploadCreate({
-          files: [],
+        await this.strapi.upload.uploadCreateByUrl({
+          url: data.logo,
+          fileName: data.title,
         });
 
-        console.log(id);
+        // const server = await this.strapi.servers.update({
+        //   documentId,
+        //   data: {
+        //     Logo: id,
+        //   },
+        // });
+
+        // console.log(id);
       }
-      console.log(data);
       // if (!server.documentId) throw new Error('No documentId');
       // this.eventBus.publish(
       //   new UpdateServerOwnerSucceedEvent({

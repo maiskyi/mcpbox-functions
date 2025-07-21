@@ -8,9 +8,12 @@ import { HttpClientServiceConfig } from './http-client.types';
 export class HttpClientService<
   SecurityDataType = unknown,
 > extends HttpClient<SecurityDataType> {
-  public constructor({ baseURL }: HttpClientServiceConfig) {
+  public constructor({ baseURL, apiToken }: HttpClientServiceConfig) {
     super({
       baseURL,
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+      },
     });
   }
 }
