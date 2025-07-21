@@ -69,7 +69,7 @@ export class ServersService {
 
   public async update(variables: UpdateServerMutationVariables) {
     try {
-      const { data } = await this.client.mutate<
+      const { data, errors } = await this.client.mutate<
         UpdateServerMutation,
         UpdateServerMutationVariables
       >({
@@ -83,6 +83,7 @@ export class ServersService {
 
       return { ...updateServer };
     } catch (error) {
+      console.log(JSON.stringify(error));
       this.logger.error(error);
       throw error;
     }

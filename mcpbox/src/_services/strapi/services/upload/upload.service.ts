@@ -31,8 +31,6 @@ export class UploadService extends Upload {
 
   public async uploadCreateByUrl({ url, fileName }: UploadCreateByUrlParams) {
     try {
-      const baseName = basename(url);
-
       const { data: arraybuffer, headers } = await axios.get(url, {
         responseType: 'arraybuffer',
       });
@@ -52,20 +50,10 @@ export class UploadService extends Upload {
         files: [file],
       });
 
-      console.log(data);
-
-      console.log({
-        file,
-        baseName,
-        buffer,
-      });
+      return { data };
     } catch (error) {
       this.logger.error(error);
       throw error;
     }
-
-    // const [{ id }] = await this.uploadCreate({
-    //   files: [],
-    // });
   }
 }
