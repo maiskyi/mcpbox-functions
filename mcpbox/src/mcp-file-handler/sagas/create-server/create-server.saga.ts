@@ -14,19 +14,19 @@ import {
 // Events
 import { NewServerFoundEvent } from '../../events/new-server-found';
 import { CreateDraftServerSucceedEvent } from '../../events/create-draft-server-succeed';
-import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-overview-succeed';
-import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
-import { UpdateServerCategorySucceedEvent } from '../../events/update-server-category-succeed';
+import { SetServerOverviewSucceedEvent } from '../../events/set-server-overview-succeed';
+import { SetServerOwnerSucceedEvent } from '../../events/set-server-owner-succeed';
+import { SetServerCategorySucceedEvent } from '../../events/set-server-category-succeed';
 import { GetServerReadmeSucceedEvent } from '../../events/get-server-readme-succeed';
-import { UpdateServerLogoSucceedEvent } from '../../events/update-server-logo-succeed';
+import { SetServerLogoSucceedEvent } from '../../events/set-server-logo-succeed';
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
-import { UpdateServerOverviewCommand } from '../../commands/update-server-overview';
-import { UpdateServerOwnerCommand } from '../../commands/update-server-owner';
-import { UpdateServerCategoryCommand } from '../../commands/update-server-category';
+import { SetServerOverviewCommand } from '../../commands/set-server-overview';
+import { SetServerOwnerCommand } from '../../commands/set-server-owner';
+import { SetServerCategoryCommand } from '../../commands/set-server-category';
 import { PublishServerCommand } from '../../commands/publish-server';
 import { GetServerReadmeCommand } from '../../commands/get-server-readme';
-import { UpdateServerLogoCommand } from '../../commands/update-server-logo';
+import { SetServerLogoCommand } from '../../commands/set-server-logo';
 
 @Injectable()
 export class CreateServerSaga {
@@ -51,14 +51,14 @@ export class CreateServerSaga {
       mergeMap(({ event }: CreateDraftServerSucceedEvent) => {
         return from([
           new GetServerReadmeCommand(event),
-          new UpdateServerLogoCommand(event),
+          new SetServerLogoCommand(event),
         ]);
       }),
       tap(({ command }) => {
         if (command.constructor.name === GetServerReadmeCommand.name) {
           this.logger.log(`Getting server ReadMe: ${command.data.title}`);
         }
-        if (command.constructor.name === UpdateServerLogoCommand.name) {
+        if (command.constructor.name === SetServerLogoCommand.name) {
           this.logger.log(`Updating server logo: ${command.data.title}`);
         }
       }),
@@ -68,23 +68,23 @@ export class CreateServerSaga {
       ofType(GetServerReadmeSucceedEvent),
       mergeMap(({ event }: GetServerReadmeSucceedEvent) => {
         return from([
-          new UpdateServerOwnerCommand(event),
-          new UpdateServerCategoryCommand(event),
-          new UpdateServerOverviewCommand(event),
+          new SetServerOwnerCommand(event),
+          new SetServerCategoryCommand(event),
+          new SetServerOverviewCommand(event),
         ]);
       }),
       tap((command) => {
-        if (command.constructor.name === UpdateServerOwnerCommand.name) {
+        if (command.constructor.name === SetServerOwnerCommand.name) {
           this.logger.log(
             `Updating server owner: ${command.command.data.title}`,
           );
         }
-        if (command.constructor.name === UpdateServerCategoryCommand.name) {
+        if (command.constructor.name === SetServerCategoryCommand.name) {
           this.logger.log(
             `Updating server category: ${command.command.data.title}`,
           );
         }
-        if (command.constructor.name === UpdateServerOverviewCommand.name) {
+        if (command.constructor.name === SetServerOverviewCommand.name) {
           this.logger.log(
             `Updating server overview: ${command.command.data.title}`,
           );
@@ -93,23 +93,23 @@ export class CreateServerSaga {
     );
 
     const owner$ = events$.pipe(
-      ofType(UpdateServerOwnerSucceedEvent),
-      map(({ event }: UpdateServerOwnerSucceedEvent) => event),
+      ofType(SetServerOwnerSucceedEvent),
+      map(({ event }: SetServerOwnerSucceedEvent) => event),
     );
 
     const overview$ = events$.pipe(
-      ofType(UpdateServerOverviewSucceedEvent),
-      map(({ event }: UpdateServerOverviewSucceedEvent) => event),
+      ofType(SetServerOverviewSucceedEvent),
+      map(({ event }: SetServerOverviewSucceedEvent) => event),
     );
 
     const category$ = events$.pipe(
-      ofType(UpdateServerCategorySucceedEvent),
-      map(({ event }: UpdateServerCategorySucceedEvent) => event),
+      ofType(SetServerCategorySucceedEvent),
+      map(({ event }: SetServerCategorySucceedEvent) => event),
     );
 
     const logo$ = events$.pipe(
-      ofType(UpdateServerLogoSucceedEvent),
-      map(({ event }: UpdateServerLogoSucceedEvent) => event),
+      ofType(SetServerLogoSucceedEvent),
+      map(({ event }: SetServerLogoSucceedEvent) => event),
     );
 
     const combined$ = combineLatest([owner$, overview$, category$, logo$]).pipe(

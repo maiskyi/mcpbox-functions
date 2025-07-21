@@ -7,20 +7,20 @@ import { McpFileHandlerService } from './services/mcp-file-handler';
 // Events
 import { NewServerFoundHandler } from './events/new-server-found';
 import { CreateDraftServerSucceedHandler } from './events/create-draft-server-succeed';
-import { UpdateServerOverviewSucceedHandler } from './events/update-server-overview-succeed';
-import { UpdateServerOwnerSucceedHandler } from './events/update-server-owner-succeed';
-import { UpdateServerCategorySucceedHandler } from './events/update-server-category-succeed';
+import { SetServerOverviewSucceedHandler } from './events/set-server-overview-succeed';
+import { SetServerOwnerSucceedHandler } from './events/set-server-owner-succeed';
+import { SetServerCategorySucceedHandler } from './events/set-server-category-succeed';
 import { PublishServerSucceedHandler } from './events/publish-server-succeed';
 import { GetServerReadmeSucceedHandler } from './events/get-server-readme-succeed';
-import { UpdateServerLogoSucceedHandler } from './events/update-server-logo-succeed';
+import { SetServerLogoSucceedHandler } from './events/set-server-logo-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
-import { UpdateServerOverviewHandler } from './commands/update-server-overview';
-import { UpdateServerOwnerHandler } from './commands/update-server-owner';
-import { UpdateServerCategoryHandler } from './commands/update-server-category';
+import { SetServerOverviewHandler } from './commands/set-server-overview';
+import { SetServerOwnerHandler } from './commands/set-server-owner';
+import { SetServerCategoryHandler } from './commands/set-server-category';
 import { PublishServerHandler } from './commands/publish-server';
 import { GetServerReadmeHandler } from './commands/get-server-readme';
-import { UpdateServerLogoHandler } from './commands/update-server-logo';
+import { SetServerLogoHandler } from './commands/set-server-logo';
 
 @Module({
   providers: [
@@ -31,20 +31,20 @@ import { UpdateServerLogoHandler } from './commands/update-server-logo';
     // Events
     NewServerFoundHandler,
     CreateDraftServerSucceedHandler,
-    UpdateServerOverviewSucceedHandler,
-    UpdateServerOwnerSucceedHandler,
-    UpdateServerCategorySucceedHandler,
+    SetServerOverviewSucceedHandler,
+    SetServerOwnerSucceedHandler,
+    SetServerCategorySucceedHandler,
     PublishServerSucceedHandler,
     GetServerReadmeSucceedHandler,
-    UpdateServerLogoSucceedHandler,
+    SetServerLogoSucceedHandler,
     // Commands
     CreateDraftServerHandler,
-    UpdateServerOverviewHandler,
-    UpdateServerOwnerHandler,
-    UpdateServerCategoryHandler,
+    SetServerOverviewHandler,
+    SetServerOwnerHandler,
+    SetServerCategoryHandler,
     PublishServerHandler,
     GetServerReadmeHandler,
-    UpdateServerLogoHandler,
+    SetServerLogoHandler,
   ],
   exports: [McpFileHandlerService],
 })
