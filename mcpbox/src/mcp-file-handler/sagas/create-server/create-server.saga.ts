@@ -18,6 +18,7 @@ import { UpdateServerOverviewSucceedEvent } from '../../events/update-server-ove
 import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
 import { UpdateServerCategorySucceedEvent } from '../../events/update-server-category-succeed';
 import { GetServerReadmeSucceedEvent } from '../../events/get-server-readme-succeed';
+import { UpdateServerLogoSucceedEvent } from '../../events/update-server-logo-succeed';
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
 import { UpdateServerOverviewCommand } from '../../commands/update-server-overview';
@@ -106,11 +107,19 @@ export class CreateServerSaga {
       map(({ event }: UpdateServerCategorySucceedEvent) => event),
     );
 
-    const combined$ = combineLatest([owner$, overview$, category$]).pipe(
-      filter(([owner, overview, category]) =>
-        [owner.documentId, overview.documentId, category.documentId].every(
-          (id, _, arr) => id === arr[0],
-        ),
+    const logo$ = events$.pipe(
+      ofType(UpdateServerLogoSucceedEvent),
+      map(({ event }: UpdateServerLogoSucceedEvent) => event),
+    );
+
+    const combined$ = combineLatest([owner$, overview$, category$, logo$]).pipe(
+      filter(([owner, overview, category, logo]) =>
+        [
+          owner.documentId,
+          overview.documentId,
+          category.documentId,
+          logo.documentId,
+        ].every((id, _, arr) => id === arr[0]),
       ),
       map(([event]) => {
         return new PublishServerCommand(event);

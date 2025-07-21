@@ -1,9 +1,8 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
-import { GithubClientService } from '@services/github';
 
-import { UpdateServerOwnerSucceedEvent } from '../../events/update-server-owner-succeed';
+import { UpdateServerLogoSucceedEvent } from '../../events/update-server-logo-succeed';
 
 import { UpdateServerLogoCommand } from './update-server-logo.command';
 
@@ -18,7 +17,6 @@ export class UpdateServerLogoHandler
   public constructor(
     private eventBus: EventBus,
     private strapi: StrapiClientService,
-    private github: GithubClientService,
   ) {}
 
   public async execute({
@@ -43,12 +41,12 @@ export class UpdateServerLogoHandler
         if (!server.documentId) throw new Error('No documentId');
       }
 
-      // this.eventBus.publish(
-      //   new UpdateServerOwnerSucceedEvent({
-      //     data,
-      //     documentId,
-      //   }),
-      // );
+      this.eventBus.publish(
+        new UpdateServerLogoSucceedEvent({
+          data,
+          documentId,
+        }),
+      );
     } catch (error) {
       this.logger.error(error);
     }

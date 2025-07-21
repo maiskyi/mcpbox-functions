@@ -12,6 +12,7 @@ import { UpdateServerOwnerSucceedHandler } from './events/update-server-owner-su
 import { UpdateServerCategorySucceedHandler } from './events/update-server-category-succeed';
 import { PublishServerSucceedHandler } from './events/publish-server-succeed';
 import { GetServerReadmeSucceedHandler } from './events/get-server-readme-succeed';
+import { UpdateServerLogoSucceedHandler } from './events/update-server-logo-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { UpdateServerOverviewHandler } from './commands/update-server-overview';
@@ -35,6 +36,7 @@ import { UpdateServerLogoHandler } from './commands/update-server-logo';
     UpdateServerCategorySucceedHandler,
     PublishServerSucceedHandler,
     GetServerReadmeSucceedHandler,
+    UpdateServerLogoSucceedHandler,
     // Commands
     CreateDraftServerHandler,
     UpdateServerOverviewHandler,
