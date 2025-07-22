@@ -11,6 +11,7 @@ export class HttpClientService<
   public constructor({ baseURL, apiToken }: HttpClientServiceConfig) {
     super({
       baseURL,
+      timeout: 120000,
       headers: {
         Authorization: `Bearer ${apiToken}`,
       },

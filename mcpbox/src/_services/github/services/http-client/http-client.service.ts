@@ -9,6 +9,7 @@ export class HttpClientService<
   public constructor() {
     super({
       baseURL: 'https://api.github.com',
+      timeout: 120000,
     });
   }
 }
