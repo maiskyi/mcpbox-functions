@@ -61,7 +61,7 @@ export class McpFileHandlerService {
 
       if (!data) throw new Error('File Schema: No data');
 
-      const { server } = await this.strapi.servers.findOne({
+      const { server: _ } = await this.strapi.servers.findOne({
         filters: {
           GitHubUrl: {
             eq: data.githubUrl,
