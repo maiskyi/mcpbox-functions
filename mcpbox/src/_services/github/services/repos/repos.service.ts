@@ -43,7 +43,12 @@ export class ReposService extends Repos {
     url,
   }: ReposGetReadmeBySourceCodeUrl) {
     try {
-      const { owner, repo, branch, path } = this.utils.parseSourceCodeUrl({
+      const {
+        owner,
+        repo,
+        branch: _b,
+        path: _p,
+      } = this.utils.parseSourceCodeUrl({
         url,
       });
 

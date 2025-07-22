@@ -1,0 +1,106 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+    tags:
+      - '*'
+  release:
+    types:
+      - created
+
+env:
+  AWS_REGION: us-east-1 # set this to your preferred AWS region, e.g. us-east-1
+  ECR_REPOSITORY: service-bff # set this to your Amazon ECR repository name
+  TAG_NAME: '' # set on execution
+  ENVIRONMENT: '' # set on execution
+  ACCOUNT: ''
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup 'Dev' environment
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        run: |
+          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+          echo "TAG_NAME=${{ github.run_number }}-dev" >> $GITHUB_ENV
+          echo "ACCOUNT=917713072512" >> $GITHUB_ENV
+
+      - name: Setup 'Staging' environment
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+          echo "TAG_NAME=${GITHUB_REF#refs/tags/}-staging" >> $GITHUB_ENV
+          echo "ACCOUNT=223675423117" >> $GITHUB_ENV
+
+      - name: Setup 'Prod' environment
+        if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
+        run: |
+          echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+          echo "TAG_NAME=${{ github.event.release.tag_name }}-prod" >> $GITHUB_ENV
+          echo "ACCOUNT=744254800613" >> $GITHUB_ENV
+
+      - name: Get Version
+        id: version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_CORE_ECR_ACCESS }}
+          aws-secret-access-key: ${{ secrets.AWS_CORE_ECR_SECRET }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ env.TAG_NAME }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./Dockerfile .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Confirm tag before release
+        run: |
+          echo ${{env.TAG_NAME}}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.3.0
+
+      - name: Verify Terraform version
+        run: terraform --version
+
+      - name: Configure AWS credentials for Terraform
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_TERRAFORM_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_TERRAFORM_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          ls -al
+          git config --global url."https://oauth2:${{ secrets.GH_PAT }}@github.com".insteadOf ssh://git@github.com
+
+      - name: Deploy
+        run: |
+          ls -al
+          cd aws/main
+          terraform init -backend-config="bucket=wearehelpful-${{env.ENVIRONMENT}}-tf-remote-state"
+          terraform apply --target=module.td.aws_ecs_task_definition.ecs -var="tag=${{env.TAG_NAME}}" -var="env=${{env.ENVIRONMENT}}" -var="package_version=${{steps.version.outputs.current-version}}" -var="account=${{env.ACCOUNT}}" -auto-approve
+          terraform apply -var="tag=${{env.TAG_NAME}}" -var="env=${{env.ENVIRONMENT}}" -var="package_version=${{steps.version.outputs.current-version}}" -var="account=${{env.ACCOUNT}}" -auto-approve

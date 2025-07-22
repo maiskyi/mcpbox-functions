@@ -69,7 +69,7 @@ export class ServersService {
 
   public async update(variables: UpdateServerMutationVariables) {
     try {
-      const { data, errors } = await this.client.mutate<
+      const { data } = await this.client.mutate<
         UpdateServerMutation,
         UpdateServerMutationVariables
       >({
