@@ -19,6 +19,7 @@ import { SetServerOwnerSucceedEvent } from '../../events/set-server-owner-succee
 import { SetServerCategorySucceedEvent } from '../../events/set-server-category-succeed';
 import { GetServerReadmeSucceedEvent } from '../../events/get-server-readme-succeed';
 import { SetServerLogoSucceedEvent } from '../../events/set-server-logo-succeed';
+import { SetServerPartitionFailedEvent } from '../../events/set-server-partition-failed';
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
 import { SetServerOverviewCommand } from '../../commands/set-server-overview';
@@ -44,6 +45,17 @@ export class CreateServerSaga {
       tap(({ command }: CreateDraftServerCommand) =>
         this.logger.log(`Creating draft server: ${command.data.title}`),
       ),
+    );
+
+    const failed$ = events$.pipe(
+      ofType(SetServerPartitionFailedEvent),
+      map(
+        ({ event }: SetServerPartitionFailedEvent) =>
+          new CreateDraftServerCommand(event),
+      ),
+      // tap(({ command }: CreateDraftServerCommand) =>
+      //   this.logger.log(`Creating draft server: ${command.data.title}`),
+      // ),
     );
 
     const draft$ = events$.pipe(
@@ -129,6 +141,6 @@ export class CreateServerSaga {
       ),
     );
 
-    return merge(new$, draft$, readme$, combined$);
+    return merge(new$, draft$, readme$, failed$, combined$);
   }
 }

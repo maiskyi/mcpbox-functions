@@ -13,6 +13,7 @@ import { SetServerCategorySucceedHandler } from './events/set-server-category-su
 import { PublishServerSucceedHandler } from './events/publish-server-succeed';
 import { GetServerReadmeSucceedHandler } from './events/get-server-readme-succeed';
 import { SetServerLogoSucceedHandler } from './events/set-server-logo-succeed';
+import { SetServerPartitionFailedHandler } from './events/set-server-partition-failed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { SetServerOverviewHandler } from './commands/set-server-overview';
@@ -37,6 +38,7 @@ import { SetServerLogoHandler } from './commands/set-server-logo';
     PublishServerSucceedHandler,
     GetServerReadmeSucceedHandler,
     SetServerLogoSucceedHandler,
+    SetServerPartitionFailedHandler,
     // Commands
     CreateDraftServerHandler,
     SetServerOverviewHandler,
