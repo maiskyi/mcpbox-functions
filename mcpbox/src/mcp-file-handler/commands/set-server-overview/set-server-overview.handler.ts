@@ -4,6 +4,10 @@ import { StrapiClientService } from '@services/strapi';
 import { GithubClientService } from '@services/github';
 import { OpenAIService } from '@services/openai';
 
+import {
+  SetServerPartitionFailedEvent,
+  SetServerPartitionFailedName,
+} from '../../events/set-server-partition-failed';
 import { SetServerOverviewSucceedEvent } from '../../events/set-server-overview-succeed';
 
 import { SetServerOverviewCommand } from './set-server-overview.command';
@@ -85,6 +89,13 @@ export class SetServerOverviewHandler
       );
     } catch (error) {
       this.logger.error(error);
+      this.eventBus.publish(
+        new SetServerPartitionFailedEvent({
+          data,
+          documentId,
+          partition: SetServerPartitionFailedName.Category,
+        }),
+      );
     }
   }
 }

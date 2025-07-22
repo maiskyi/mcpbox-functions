@@ -13,6 +13,9 @@ import {
   FindManyServers,
   FindManyServersQuery,
   FindManyServersQueryVariables,
+  DeleteServer,
+  DeleteServerMutation,
+  DeleteServerMutationVariables,
 } from '../../__generated__/gql/query';
 import { GqlClientService } from '../gql-client';
 
@@ -39,6 +42,27 @@ export class ServersService {
       const { createServer } = data;
 
       return { ...createServer };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async delete(variables: DeleteServerMutationVariables) {
+    try {
+      const { data } = await this.client.mutate<
+        DeleteServerMutation,
+        DeleteServerMutationVariables
+      >({
+        variables,
+        mutation: DeleteServer,
+      });
+
+      if (!data?.deleteServer) throw new Error('No data');
+
+      const { deleteServer } = data;
+
+      return { ...deleteServer };
     } catch (error) {
       this.logger.error(error);
       throw error;

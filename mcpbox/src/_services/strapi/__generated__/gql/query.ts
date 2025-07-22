@@ -1353,6 +1353,13 @@ export type CreateServerMutationVariables = Exact<{
 
 export type CreateServerMutation = { __typename?: 'Mutation', createServer?: { __typename?: 'Server', documentId: string } | null };
 
+export type DeleteServerMutationVariables = Exact<{
+  documentId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteServerMutation = { __typename?: 'Mutation', deleteServer?: { __typename?: 'DeleteMutationResponse', documentId: string } | null };
+
 export type FindManyServersQueryVariables = Exact<{
   filters?: InputMaybe<ServerFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
@@ -1389,6 +1396,13 @@ export const FindManyServerCategories = gql`
 export const CreateServer = gql`
     mutation createServer($data: ServerInput!, $status: PublicationStatus = DRAFT) {
   createServer(data: $data, status: $status) {
+    documentId
+  }
+}
+    `;
+export const DeleteServer = gql`
+    mutation deleteServer($documentId: ID!) {
+  deleteServer(documentId: $documentId) {
     documentId
   }
 }

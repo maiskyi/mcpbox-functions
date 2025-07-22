@@ -3,6 +3,10 @@ import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 import { GithubClientService } from '@services/github';
 
+import {
+  SetServerPartitionFailedEvent,
+  SetServerPartitionFailedName,
+} from '../../events/set-server-partition-failed';
 import { SetServerOwnerSucceedEvent } from '../../events/set-server-owner-succeed';
 
 import { SetServerOwnerCommand } from './set-server-owner.command';
@@ -46,6 +50,13 @@ export class SetServerOwnerHandler
       );
     } catch (error) {
       this.logger.error(error);
+      this.eventBus.publish(
+        new SetServerPartitionFailedEvent({
+          data,
+          documentId,
+          partition: SetServerPartitionFailedName.Category,
+        }),
+      );
     }
   }
 }

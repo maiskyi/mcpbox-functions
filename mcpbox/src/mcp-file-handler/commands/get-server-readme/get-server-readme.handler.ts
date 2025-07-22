@@ -1,9 +1,11 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
-import { StrapiClientService } from '@services/strapi';
 import { GithubClientService } from '@services/github';
-import { OpenAIService } from '@services/openai';
 
+import {
+  SetServerPartitionFailedEvent,
+  SetServerPartitionFailedName,
+} from '../../events/set-server-partition-failed';
 import { GetServerReadmeSucceedEvent } from '../../events/get-server-readme-succeed';
 
 import { GetServerReadmeCommand } from './get-server-readme.command';
@@ -18,9 +20,7 @@ export class GetServerReadmeHandler
 
   public constructor(
     private eventBus: EventBus,
-    private strapi: StrapiClientService,
     private github: GithubClientService,
-    private openai: OpenAIService,
   ) {}
 
   public async execute({
@@ -43,6 +43,13 @@ export class GetServerReadmeHandler
       );
     } catch (error) {
       this.logger.error(error);
+      this.eventBus.publish(
+        new SetServerPartitionFailedEvent({
+          data,
+          documentId,
+          partition: SetServerPartitionFailedName.Readme,
+        }),
+      );
     }
   }
 }

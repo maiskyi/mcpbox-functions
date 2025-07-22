@@ -1,0 +1,5 @@
+mutation deleteServer($documentId: ID!) {
+  deleteServer(documentId: $documentId) {
+    documentId
+  }
+}

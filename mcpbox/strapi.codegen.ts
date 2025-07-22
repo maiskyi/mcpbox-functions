@@ -6,7 +6,7 @@ init();
 const config: CodegenConfig = {
   schema: [
     {
-      [`${process.env.STRAPI_SCHEMA_URL}`]: {
+      [`${process.env.STRAPI_GRAPHQL_SCHEMA_URL}`]: {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },

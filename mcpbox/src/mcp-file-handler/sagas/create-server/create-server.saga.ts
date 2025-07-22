@@ -19,6 +19,7 @@ import { SetServerOwnerSucceedEvent } from '../../events/set-server-owner-succee
 import { SetServerCategorySucceedEvent } from '../../events/set-server-category-succeed';
 import { GetServerReadmeSucceedEvent } from '../../events/get-server-readme-succeed';
 import { SetServerLogoSucceedEvent } from '../../events/set-server-logo-succeed';
+import { SetServerPartitionFailedEvent } from '../../events/set-server-partition-failed';
 // Commands
 import { CreateDraftServerCommand } from '../../commands/create-draft-server';
 import { SetServerOverviewCommand } from '../../commands/set-server-overview';
@@ -27,6 +28,7 @@ import { SetServerCategoryCommand } from '../../commands/set-server-category';
 import { PublishServerCommand } from '../../commands/publish-server';
 import { GetServerReadmeCommand } from '../../commands/get-server-readme';
 import { SetServerLogoCommand } from '../../commands/set-server-logo';
+import { DeleteDraftServerCommand } from '../../commands/delete-draft-server';
 
 @Injectable()
 export class CreateServerSaga {
@@ -46,20 +48,25 @@ export class CreateServerSaga {
       ),
     );
 
+    const failed$ = events$.pipe(
+      ofType(SetServerPartitionFailedEvent),
+      map(
+        ({ event }: SetServerPartitionFailedEvent) =>
+          new DeleteDraftServerCommand(event),
+      ),
+      tap(({ command }: DeleteDraftServerCommand) =>
+        this.logger.log(`Deleting draft server: ${command.data.title}`),
+      ),
+    );
+
     const draft$ = events$.pipe(
       ofType(CreateDraftServerSucceedEvent),
       mergeMap(({ event }: CreateDraftServerSucceedEvent) => {
-        return from([
-          new GetServerReadmeCommand(event),
-          new SetServerLogoCommand(event),
-        ]);
+        return from([new GetServerReadmeCommand(event)]);
       }),
       tap(({ command }) => {
         if (command.constructor.name === GetServerReadmeCommand.name) {
           this.logger.log(`Getting server ReadMe: ${command.data.title}`);
-        }
-        if (command.constructor.name === SetServerLogoCommand.name) {
-          this.logger.log(`Updating server logo: ${command.data.title}`);
         }
       }),
     );
@@ -71,6 +78,7 @@ export class CreateServerSaga {
           new SetServerOwnerCommand(event),
           new SetServerCategoryCommand(event),
           new SetServerOverviewCommand(event),
+          new SetServerLogoCommand(event),
         ]);
       }),
       tap((command) => {
@@ -87,6 +95,11 @@ export class CreateServerSaga {
         if (command.constructor.name === SetServerOverviewCommand.name) {
           this.logger.log(
             `Updating server overview: ${command.command.data.title}`,
+          );
+        }
+        if (command.constructor.name === SetServerLogoCommand.name) {
+          this.logger.log(
+            `Updating server logo: ${command.command.data.title}`,
           );
         }
       }),
@@ -129,6 +142,6 @@ export class CreateServerSaga {
       ),
     );
 
-    return merge(new$, draft$, readme$, combined$);
+    return merge(new$, draft$, readme$, failed$, combined$);
   }
 }
