@@ -14,6 +14,7 @@ import { PublishServerSucceedHandler } from './events/publish-server-succeed';
 import { GetServerReadmeSucceedHandler } from './events/get-server-readme-succeed';
 import { SetServerLogoSucceedHandler } from './events/set-server-logo-succeed';
 import { SetServerPartitionFailedHandler } from './events/set-server-partition-failed';
+import { DeleteDraftServerSucceedHandler } from './events/delete-draft-server-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { SetServerOverviewHandler } from './commands/set-server-overview';
@@ -22,6 +23,7 @@ import { SetServerCategoryHandler } from './commands/set-server-category';
 import { PublishServerHandler } from './commands/publish-server';
 import { GetServerReadmeHandler } from './commands/get-server-readme';
 import { SetServerLogoHandler } from './commands/set-server-logo';
+import { DeleteDraftServerHandler } from './commands/delete-draft-server';
 
 @Module({
   providers: [
@@ -39,6 +41,7 @@ import { SetServerLogoHandler } from './commands/set-server-logo';
     GetServerReadmeSucceedHandler,
     SetServerLogoSucceedHandler,
     SetServerPartitionFailedHandler,
+    DeleteDraftServerSucceedHandler,
     // Commands
     CreateDraftServerHandler,
     SetServerOverviewHandler,
@@ -47,6 +50,7 @@ import { SetServerLogoHandler } from './commands/set-server-logo';
     PublishServerHandler,
     GetServerReadmeHandler,
     SetServerLogoHandler,
+    DeleteDraftServerHandler,
   ],
   exports: [McpFileHandlerService],
 })

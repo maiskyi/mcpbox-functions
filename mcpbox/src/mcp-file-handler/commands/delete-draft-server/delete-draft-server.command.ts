@@ -4,6 +4,7 @@ import { FileSchema } from '../../types';
 
 interface DeleteDraftServerCommandType {
   data: FileSchema;
+  documentId: string;
 }
 
 export class DeleteDraftServerCommand extends Command<void> {

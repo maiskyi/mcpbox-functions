@@ -28,6 +28,7 @@ import { SetServerCategoryCommand } from '../../commands/set-server-category';
 import { PublishServerCommand } from '../../commands/publish-server';
 import { GetServerReadmeCommand } from '../../commands/get-server-readme';
 import { SetServerLogoCommand } from '../../commands/set-server-logo';
+import { DeleteDraftServerCommand } from '../../commands/delete-draft-server';
 
 @Injectable()
 export class CreateServerSaga {
@@ -51,27 +52,21 @@ export class CreateServerSaga {
       ofType(SetServerPartitionFailedEvent),
       map(
         ({ event }: SetServerPartitionFailedEvent) =>
-          new CreateDraftServerCommand(event),
+          new DeleteDraftServerCommand(event),
       ),
-      // tap(({ command }: CreateDraftServerCommand) =>
-      //   this.logger.log(`Creating draft server: ${command.data.title}`),
-      // ),
+      tap(({ command }: DeleteDraftServerCommand) =>
+        this.logger.log(`Deleting draft server: ${command.data.title}`),
+      ),
     );
 
     const draft$ = events$.pipe(
       ofType(CreateDraftServerSucceedEvent),
       mergeMap(({ event }: CreateDraftServerSucceedEvent) => {
-        return from([
-          new GetServerReadmeCommand(event),
-          new SetServerLogoCommand(event),
-        ]);
+        return from([new GetServerReadmeCommand(event)]);
       }),
       tap(({ command }) => {
         if (command.constructor.name === GetServerReadmeCommand.name) {
           this.logger.log(`Getting server ReadMe: ${command.data.title}`);
-        }
-        if (command.constructor.name === SetServerLogoCommand.name) {
-          this.logger.log(`Updating server logo: ${command.data.title}`);
         }
       }),
     );
@@ -83,6 +78,7 @@ export class CreateServerSaga {
           new SetServerOwnerCommand(event),
           new SetServerCategoryCommand(event),
           new SetServerOverviewCommand(event),
+          new SetServerLogoCommand(event),
         ]);
       }),
       tap((command) => {
@@ -99,6 +95,11 @@ export class CreateServerSaga {
         if (command.constructor.name === SetServerOverviewCommand.name) {
           this.logger.log(
             `Updating server overview: ${command.command.data.title}`,
+          );
+        }
+        if (command.constructor.name === SetServerLogoCommand.name) {
+          this.logger.log(
+            `Updating server logo: ${command.command.data.title}`,
           );
         }
       }),

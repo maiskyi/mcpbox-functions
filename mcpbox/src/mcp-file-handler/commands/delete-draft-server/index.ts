@@ -1,2 +1,2 @@
-export { CreateDraftServerCommand } from './delete-draft-server.command';
-export { CreateDraftServerHandler } from './delete-draft-server.handler';
+export { DeleteDraftServerCommand } from './delete-draft-server.command';
+export { DeleteDraftServerHandler } from './delete-draft-server.handler';

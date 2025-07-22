@@ -3,4 +3,5 @@ export enum SetServerPartitionFailedName {
   Category = 'Category',
   Logo = 'Logo',
   Owner = 'Owner',
+  Readme = 'Readme',
 }

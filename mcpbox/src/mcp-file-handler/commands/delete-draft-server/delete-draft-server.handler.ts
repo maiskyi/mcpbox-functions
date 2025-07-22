@@ -2,15 +2,15 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 
-import { CreateDraftServerSucceedEvent } from '../../events/create-draft-server-succeed';
+import { DeleteDraftServerSucceedEvent } from '../../events/delete-draft-server-succeed';
 
 import { DeleteDraftServerCommand } from './delete-draft-server.command';
 
 @CommandHandler(DeleteDraftServerCommand)
-export class CreateDraftServerHandler
+export class DeleteDraftServerHandler
   implements ICommandHandler<DeleteDraftServerCommand>
 {
-  private readonly logger = new Logger(CreateDraftServerHandler.name, {
+  private readonly logger = new Logger(DeleteDraftServerHandler.name, {
     timestamp: true,
   });
 
@@ -19,23 +19,18 @@ export class CreateDraftServerHandler
     private strapi: StrapiClientService,
   ) {}
 
-  public async execute({ command: { data } }: DeleteDraftServerCommand) {
+  public async execute({
+    command: { data, documentId },
+  }: DeleteDraftServerCommand) {
     try {
-      const { documentId } = await this.strapi.servers.create({
-        data: {
-          Title: data.title,
-          Description: data.description,
-          GitHubUrl: data.githubUrl,
-          IsOfficial: data.isOfficial,
-          Tools: JSON.stringify(data.tools),
-          Settings: JSON.stringify(data.settings),
-        },
+      const server = await this.strapi.servers.delete({
+        documentId,
       });
 
-      if (!documentId) throw new Error('No documentId');
+      if (!server.documentId) throw new Error('No documentId');
 
       this.eventBus.publish(
-        new CreateDraftServerSucceedEvent({
+        new DeleteDraftServerSucceedEvent({
           data,
           documentId,
         }),
