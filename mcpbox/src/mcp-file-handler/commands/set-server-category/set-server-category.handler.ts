@@ -4,10 +4,8 @@ import { StrapiClientService } from '@services/strapi';
 import { OpenAIService } from '@services/openai';
 
 import { SetServerCategorySucceedEvent } from '../../events/set-server-category-succeed';
-import {
-  SetServerPartitionFailedEvent,
-  SetServerPartitionFailedName,
-} from '../../events/set-server-partition-failed';
+import { SetServerPartitionFailedEvent } from '../../events/set-server-partition-failed';
+import { ServerPartition } from '../../types';
 
 import { SetServerCategoryCommand } from './set-server-category.command';
 
@@ -93,7 +91,7 @@ export class SetServerCategoryHandler
         new SetServerPartitionFailedEvent({
           data,
           documentId,
-          partition: SetServerPartitionFailedName.Category,
+          partition: ServerPartition.Category,
         }),
       );
     }

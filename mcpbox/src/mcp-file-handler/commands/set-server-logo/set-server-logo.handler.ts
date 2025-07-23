@@ -2,11 +2,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 
-import {
-  SetServerPartitionFailedEvent,
-  SetServerPartitionFailedName,
-} from '../..//events/set-server-partition-failed';
+import { SetServerPartitionFailedEvent } from '../..//events/set-server-partition-failed';
 import { SetServerLogoSucceedEvent } from '../../events/set-server-logo-succeed';
+import { ServerPartition } from '../../types';
 
 import { SetServerLogoCommand } from './set-server-logo.command';
 
@@ -57,7 +55,7 @@ export class SetServerLogoHandler
         new SetServerPartitionFailedEvent({
           data,
           documentId,
-          partition: SetServerPartitionFailedName.Category,
+          partition: ServerPartition.Category,
         }),
       );
     }

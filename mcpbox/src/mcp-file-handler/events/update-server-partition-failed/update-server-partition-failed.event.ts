@@ -1,13 +1,13 @@
 import { FileSchema, ServerPartition } from '../../types';
 
-interface SetServerPartitionFailedEventType {
+interface UpdateServerPartitionFailedEventType {
   data: FileSchema;
   documentId: string;
   partition: ServerPartition;
 }
 
-export class SetServerPartitionFailedEvent {
+export class UpdateServerPartitionFailedEvent {
   public constructor(
-    public readonly event: SetServerPartitionFailedEventType,
+    public readonly event: UpdateServerPartitionFailedEventType,
   ) {}
 }
