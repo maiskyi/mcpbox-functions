@@ -2,7 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 
 import { GithubClientService } from './services/github-client';
 import { UtilsService } from './services/utils';
-import { HttpClientService } from './services/http-client';
+import { HttpClientService, HttpClientConfig } from './services/http-client';
 import { ReposService } from './services/repos';
 
 @Module({
@@ -15,10 +15,18 @@ import { ReposService } from './services/repos';
   exports: [GithubClientService],
 })
 export class GithubModule {
-  public static forRootAsync(): DynamicModule {
+  public static forRoot({ apiToken }: HttpClientConfig): DynamicModule {
     return {
       global: true,
       module: GithubModule,
+      providers: [
+        {
+          provide: HttpClientService,
+          useValue: new HttpClientService({
+            apiToken,
+          }),
+        },
+      ],
     };
   }
 }

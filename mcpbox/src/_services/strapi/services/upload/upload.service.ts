@@ -15,7 +15,6 @@ export class UploadService extends Upload {
   });
 
   private getFileName({ url, fileName }: GetFileNameParams) {
-    console.log(fileName);
     const pathname = new URL(url).pathname;
 
     const baseName = basename(pathname);
