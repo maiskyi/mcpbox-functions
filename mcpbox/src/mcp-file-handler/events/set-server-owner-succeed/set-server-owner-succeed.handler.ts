@@ -12,6 +12,6 @@ export class SetServerOwnerSucceedHandler
   });
 
   public handle({ event: { data } }: SetServerOwnerSucceedEvent) {
-    this.logger.log(`Updating server owner: ${data.title} succeed`);
+    this.logger.log(`Setting server owner: ${data.title} succeed`);
   }
 }

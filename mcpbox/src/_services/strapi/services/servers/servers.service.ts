@@ -107,7 +107,6 @@ export class ServersService {
 
       return { ...updateServer };
     } catch (error) {
-      console.log(JSON.stringify(error));
       this.logger.error(error);
       throw error;
     }

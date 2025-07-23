@@ -3,4 +3,5 @@ export interface AppConfig {
   strapiSchemaUrl: string;
   strapiBaseUrl: string;
   openaiApiKey: string;
+  githubApiToken?: string[];
 }
