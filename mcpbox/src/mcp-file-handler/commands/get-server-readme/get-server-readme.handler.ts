@@ -2,11 +2,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { GithubClientService } from '@services/github';
 
-import {
-  SetServerPartitionFailedEvent,
-  SetServerPartitionFailedName,
-} from '../../events/set-server-partition-failed';
+import { SetServerPartitionFailedEvent } from '../../events/set-server-partition-failed';
 import { GetServerReadmeSucceedEvent } from '../../events/get-server-readme-succeed';
+import { ServerPartition } from '../../types';
 
 import { GetServerReadmeCommand } from './get-server-readme.command';
 
@@ -47,7 +45,7 @@ export class GetServerReadmeHandler
         new SetServerPartitionFailedEvent({
           data,
           documentId,
-          partition: SetServerPartitionFailedName.Readme,
+          partition: ServerPartition.Readme,
         }),
       );
     }

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 // Sagas
 import { CreateServerSaga } from './sagas/create-server';
+import { UpdateServerSaga } from './sagas/update-server';
 // Services
 import { McpFileHandlerService } from './services/mcp-file-handler';
 // Events
@@ -15,6 +16,9 @@ import { GetServerReadmeSucceedHandler } from './events/get-server-readme-succee
 import { SetServerLogoSucceedHandler } from './events/set-server-logo-succeed';
 import { SetServerPartitionFailedHandler } from './events/set-server-partition-failed';
 import { DeleteDraftServerSucceedHandler } from './events/delete-draft-server-succeed';
+import { ExistingServerFoundHandler } from './events/existing-server-found';
+import { UpdateServerToolsSettingsSucceedHandler } from './events/update-server-tools-settings-succeed';
+import { UpdateServerPartitionFailedHandler } from './events/update-server-partition-failed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { SetServerOverviewHandler } from './commands/set-server-overview';
@@ -24,11 +28,13 @@ import { PublishServerHandler } from './commands/publish-server';
 import { GetServerReadmeHandler } from './commands/get-server-readme';
 import { SetServerLogoHandler } from './commands/set-server-logo';
 import { DeleteDraftServerHandler } from './commands/delete-draft-server';
+import { UpdateServerToolsSettingsHandler } from './commands/update-server-tools-settings';
 
 @Module({
   providers: [
     // Sagas
     CreateServerSaga,
+    UpdateServerSaga,
     // Services
     McpFileHandlerService,
     // Events
@@ -42,6 +48,9 @@ import { DeleteDraftServerHandler } from './commands/delete-draft-server';
     SetServerLogoSucceedHandler,
     SetServerPartitionFailedHandler,
     DeleteDraftServerSucceedHandler,
+    ExistingServerFoundHandler,
+    UpdateServerToolsSettingsSucceedHandler,
+    UpdateServerPartitionFailedHandler,
     // Commands
     CreateDraftServerHandler,
     SetServerOverviewHandler,
@@ -51,6 +60,7 @@ import { DeleteDraftServerHandler } from './commands/delete-draft-server';
     GetServerReadmeHandler,
     SetServerLogoHandler,
     DeleteDraftServerHandler,
+    UpdateServerToolsSettingsHandler,
   ],
   exports: [McpFileHandlerService],
 })

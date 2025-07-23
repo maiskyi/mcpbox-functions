@@ -7,8 +7,8 @@ import { StrapiClientService } from '@services/strapi';
 import { EventBus } from '@nestjs/cqrs';
 
 import { fileSchema } from '../../schemas';
-import { FileSchema } from '../../types';
 import { NewServerFoundEvent } from '../../events/new-server-found';
+import { ExistingServerFoundEvent } from '../../events/existing-server-found';
 
 @Injectable()
 export class McpFileHandlerService {
@@ -21,21 +21,6 @@ export class McpFileHandlerService {
     private strapi: StrapiClientService,
     private eventBus: EventBus,
   ) {}
-
-  private async createStrapiServer(data: FileSchema) {
-    const { documentId } = await this.strapi.servers.create({
-      data: {
-        Title: data.title,
-        Description: data.description,
-        GitHubUrl: data.githubUrl,
-        IsOfficial: data.isOfficial,
-        Tools: JSON.stringify(data.tools),
-        Settings: JSON.stringify(data.settings),
-      },
-    });
-
-    return { documentId };
-  }
 
   public async handleStorageEvent({
     data: { bucket, name, contentType },
@@ -61,7 +46,7 @@ export class McpFileHandlerService {
 
       if (!data) throw new Error('File Schema: No data');
 
-      const { server: _ } = await this.strapi.servers.findOne({
+      const { server } = await this.strapi.servers.findOne({
         filters: {
           GitHubUrl: {
             eq: data.githubUrl,
@@ -69,14 +54,21 @@ export class McpFileHandlerService {
         },
       });
 
-      // if (!server) {
+      if (!server) {
+        this.eventBus.publish(
+          new NewServerFoundEvent({
+            data,
+          }),
+        );
+        return;
+      }
+
       this.eventBus.publish(
-        new NewServerFoundEvent({
+        new ExistingServerFoundEvent({
           data,
+          documentId: server.documentId,
         }),
       );
-      return;
-      // }
     } catch (error) {
       this.logger.error(error);
     }
