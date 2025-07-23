@@ -1,0 +1,14 @@
+Головна сторінка
+https://mcp-box.ue.r.appspot.com/
+
+Список серверів
+https://mcp-box.ue.r.appspot.com/servers
+
+Сторінка серверу
+https://mcp-box.ue.r.appspot.com/servers/namecheap-domains-search-register
+
+FAQs
+https://mcp-box.ue.r.appspot.com/faqs
+
+Заглушка
+https://mcp-box.ue.r.appspot.com/dashboard
