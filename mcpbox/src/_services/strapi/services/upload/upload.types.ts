@@ -7,3 +7,7 @@ export interface GetFileNameParams {
   url: string;
   fileName?: string;
 }
+
+export interface GetImgArrayBufferParams {
+  url: string;
+}

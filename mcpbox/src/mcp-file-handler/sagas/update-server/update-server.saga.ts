@@ -4,8 +4,10 @@ import { map, merge, Observable, tap } from 'rxjs';
 
 // Events
 import { ExistingServerFoundEvent } from '../../events/existing-server-found';
+import { UpdateServerToolsSettingsSucceedEvent } from '../../events/update-server-tools-settings-succeed';
 // Commands
 import { UpdateServerToolsSettingsCommand } from '../../commands/update-server-tools-settings';
+import { PublishServerUpdatesCommand } from '../../commands/publish-server-updates';
 
 @Injectable()
 export class UpdateServerSaga {
@@ -25,6 +27,14 @@ export class UpdateServerSaga {
       ),
     );
 
-    return merge(existing$);
+    const toolsAndSettings$ = events$.pipe(
+      ofType(UpdateServerToolsSettingsSucceedEvent),
+      map(({ event }) => new PublishServerUpdatesCommand(event)),
+      tap(({ command }) =>
+        this.logger.log(`Publishing updates for server: ${command.data.title}`),
+      ),
+    );
+
+    return merge(existing$, toolsAndSettings$);
   }
 }
