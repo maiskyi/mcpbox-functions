@@ -2,11 +2,10 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 import { StrapiClientService } from '@services/strapi';
 
-import { SetServerPartitionFailedEvent } from '../..//events/set-server-partition-failed';
 import { SetServerLogoSucceedEvent } from '../../events/set-server-logo-succeed';
-import { ServerPartition } from '../../types';
 
 import { SetServerLogoCommand } from './set-server-logo.command';
+import { DEFAULT_ICONS } from './set-server-logo.const';
 
 @CommandHandler(SetServerLogoCommand)
 export class SetServerLogoHandler
@@ -25,7 +24,7 @@ export class SetServerLogoHandler
     command: { data, documentId },
   }: SetServerLogoCommand) {
     try {
-      if (data.logo) {
+      if (data.logo && !DEFAULT_ICONS.includes(data.logo)) {
         const {
           data: [file],
         } = await this.strapi.upload.uploadCreateByUrl({
@@ -52,10 +51,9 @@ export class SetServerLogoHandler
     } catch (error) {
       this.logger.error(error);
       this.eventBus.publish(
-        new SetServerPartitionFailedEvent({
+        new SetServerLogoSucceedEvent({
           data,
           documentId,
-          partition: ServerPartition.Category,
         }),
       );
     }

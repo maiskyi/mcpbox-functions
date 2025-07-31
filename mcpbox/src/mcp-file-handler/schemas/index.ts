@@ -20,7 +20,7 @@ const toolSchema = z.object({
 });
 
 export const fileSchema = z.object({
-  logo: z.string().optional(),
+  logo: z.string().optional().nullable(),
   isOfficial: z.boolean().nonoptional(),
   title: z.string().nonoptional(),
   githubUrl: z.url().nonoptional(),

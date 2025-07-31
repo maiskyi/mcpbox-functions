@@ -19,6 +19,7 @@ import { DeleteDraftServerSucceedHandler } from './events/delete-draft-server-su
 import { ExistingServerFoundHandler } from './events/existing-server-found';
 import { UpdateServerToolsSettingsSucceedHandler } from './events/update-server-tools-settings-succeed';
 import { UpdateServerPartitionFailedHandler } from './events/update-server-partition-failed';
+import { PublishServerUpdatesSucceedHandler } from './events/publish-server-updates-succeed';
 // Commands
 import { CreateDraftServerHandler } from './commands/create-draft-server';
 import { SetServerOverviewHandler } from './commands/set-server-overview';
@@ -29,6 +30,7 @@ import { GetServerReadmeHandler } from './commands/get-server-readme';
 import { SetServerLogoHandler } from './commands/set-server-logo';
 import { DeleteDraftServerHandler } from './commands/delete-draft-server';
 import { UpdateServerToolsSettingsHandler } from './commands/update-server-tools-settings';
+import { PublishServerUpdatesHandler } from './commands/publish-server-updates';
 
 @Module({
   providers: [
@@ -51,6 +53,7 @@ import { UpdateServerToolsSettingsHandler } from './commands/update-server-tools
     ExistingServerFoundHandler,
     UpdateServerToolsSettingsSucceedHandler,
     UpdateServerPartitionFailedHandler,
+    PublishServerUpdatesSucceedHandler,
     // Commands
     CreateDraftServerHandler,
     SetServerOverviewHandler,
@@ -61,6 +64,7 @@ import { UpdateServerToolsSettingsHandler } from './commands/update-server-tools
     SetServerLogoHandler,
     DeleteDraftServerHandler,
     UpdateServerToolsSettingsHandler,
+    PublishServerUpdatesHandler,
   ],
   exports: [McpFileHandlerService],
 })
