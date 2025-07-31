@@ -8,13 +8,33 @@ import { Upload } from '../../__generated__/api/Upload';
 import { UploadCreateData } from '../../__generated__/api/data-contracts';
 import { HttpClientService } from '../http-client';
 
-import { GetFileNameParams, UploadCreateByUrlParams } from './upload.types';
+import {
+  GetFileNameParams,
+  UploadCreateByUrlParams,
+  GetImgArrayBufferParams,
+} from './upload.types';
 
 @Injectable()
 export class UploadService extends Upload {
   private readonly logger = new Logger(UploadService.name, {
     timestamp: true,
   });
+
+  private async getImgArrayBuffer({ url }: GetImgArrayBufferParams) {
+    try {
+      const { data: arraybuffer, headers } = await axios.get(url, {
+        responseType: 'arraybuffer',
+      });
+      return {
+        arraybuffer,
+        headers,
+      };
+    } catch {
+      const err = new Error('Failed to get image array buffer');
+      this.logger.error(err);
+      throw err;
+    }
+  }
 
   private getFileName({ url, fileName }: GetFileNameParams) {
     const pathname = new URL(url).pathname;
